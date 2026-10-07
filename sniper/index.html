@@ -82,6 +82,7 @@ h1.page{font-size:19px;margin:2px 0 4px}
 .tv-fixed .tradingview-widget-container,.tv-fixed #tvWidget,.tv-fixed #tvWidget>div{height:500px!important}.tv-fixed iframe{height:500px!important}
 .legend{display:flex;gap:14px;font-size:9px;color:#8997ae;margin-top:8px;flex-wrap:wrap}
 .legend i{display:inline-block;width:8px;height:8px;border-radius:3px;margin-left:4px;vertical-align:-1px}
+.sig-chart{width:100%;max-height:340px;object-fit:cover;object-position:left center;border-radius:10px;margin:8px 0;cursor:zoom-in;border:1px solid var(--line)}
 .sig{border:1px solid rgba(255,255,255,.055);border-radius:12px;padding:12px 14px;margin-bottom:9px;background:rgba(6,11,21,.25)}
 .sig-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
 .pair{font-weight:700;direction:ltr;cursor:pointer}
@@ -187,7 +188,7 @@ h1.page{font-size:19px;margin:2px 0 4px}
       <div class="pstrip" id="pstrip"></div>
       <div class="grid stats">
         <div class="glass stat"><div class="stat-top">وضعیت ربات <span>🤖</span></div><div class="stat-num" id="stBot">—</div><div class="stat-chg" id="stBotSub"></div></div>
-        <div class="glass stat"><div class="stat-top">شکارهای اخیر <span>🎯</span></div><div class="stat-num" id="stSig">۰</div><div class="stat-chg">۲۰ مورد آخر</div></div>
+        <div class="glass stat" id="anaCard" style="cursor:pointer" onclick="document.querySelector('[data-s=\'dashboard\']')"><div class="stat-top">وین‌ریت کل <span>🏆</span></div><div class="stat-num" id="anaWR">—</div><div class="stat-chg" id="anaSub">در حال تحلیل…</div></div>
         <div class="glass stat"><div class="stat-top">اخبار پرتاثیر <span>📰</span></div><div class="stat-num" id="stNews">۰</div><div class="stat-chg">سنتیمنت شدید</div></div>
         <div class="glass stat"><div class="stat-top">مشترکین <span>👥</span></div><div class="stat-num" id="stSubs">۰</div><div class="stat-chg">دریافت خودکار</div></div>
       </div>
@@ -457,9 +458,11 @@ function render(s){
   const sigHtml=(s.signals||[]).slice().reverse().map(x=>{
     const short=/شورت|SHORT/i.test(x.text),long=/لانگ|LONG/i.test(x.text);
     const nm=(x.text.match(/نماد[:：]\s*\*{0,2}\s*([A-Z0-9]+)/i)||x.text.match(/([A-Z]{2,6})\/USDT/i)||[])[1]||"شکار";
+    const ch = x.ts ? `<img class="sig-chart" loading="lazy" src="https://sniper-web.quilt-refract.workers.dev/api/chart/${x.ts}" alt="chart" onclick="zoomImg(this.src)" onerror="this.style.display='none'">` : "";
     return `<div class="sig"><div class="sig-head">
       <span class="pair" onclick="goChart('${nm}')">${nm}/USDT ↗</span>
       <span class="pill ${short?'sell':long?'buy':'gold'}">${short?'SHORT ▼':long?'LONG ▲':'—'}</span></div>
+      ${ch}
       <div class="sig-text">${String(x.text).replace(/\*\*/g,"").slice(0,420)}</div></div>`;
   }).join("");
   $("sigDash").innerHTML=sigHtml||'<div class="empty">هنوز شکاری ثبت نشده — موتور ساکت تا ستاپ وین‌ریت</div>';
@@ -746,5 +749,23 @@ $("btnStats").onclick=loadStats;
 window.delAlert=delAlert;
 loadAlerts();
 </script>
+<div id="lightbox" onclick="this.style.display='none'" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:999;cursor:zoom-out;align-items:center;justify-content:center">
+  <img id="lbImg" style="max-width:96vw;max-height:94vh;border-radius:12px;box-shadow:0 8px 60px rgba(0,0,0,.8)">
+</div>
+<script>async function loadAnalytics(){
+  try{
+    const a=await (await fetch("https://sniper-web.quilt-refract.workers.dev/api/analytics")).json();
+    const b=a.bySide||{};
+    const parts=[];
+    for(const [k,v] of Object.entries(b)){
+      if(v.winrate===null)continue;
+      parts.push(k+": "+v.winrate+"٪ ("+v.tp+"✅/"+v.sl+"❌)");
+    }
+    const el1=document.getElementById("anaWR"),el2=document.getElementById("anaSub");
+    if(el1){el1.textContent=parts.join(" · ")||"—";el2.textContent="TP1: "+(a.tp1_hits||0)+" · TP2: "+(a.tp2_hits||0)+" · باز: "+(a.open||0);}
+  }catch(e){}
+}
+loadAnalytics();setInterval(loadAnalytics,1800000);
+function zoomImg(src){const lb=document.getElementById('lightbox');document.getElementById('lbImg').src=src;lb.style.display='flex'}</script>
 </body>
 </html>
