@@ -79,6 +79,7 @@ h1.page{font-size:19px;margin:2px 0 4px}
 #chartBox{width:100%;height:420px;position:relative;direction:ltr}
 #chartCv{width:100%;height:100%;display:block}
 .chart-tip{position:absolute;pointer-events:none;background:rgba(13,20,34,.94);border:1px solid var(--line);border-radius:10px;padding:7px 11px;font-size:10px;direction:ltr;display:none;z-index:3;white-space:nowrap}
+.tv-fixed .tradingview-widget-container,.tv-fixed #tvWidget,.tv-fixed #tvWidget>div{height:500px!important}.tv-fixed iframe{height:500px!important}
 .legend{display:flex;gap:14px;font-size:9px;color:#8997ae;margin-top:8px;flex-wrap:wrap}
 .legend i{display:inline-block;width:8px;height:8px;border-radius:3px;margin-left:4px;vertical-align:-1px}
 .sig{border:1px solid rgba(255,255,255,.055);border-radius:12px;padding:12px 14px;margin-bottom:9px;background:rgba(6,11,21,.25)}
@@ -219,7 +220,7 @@ h1.page{font-size:19px;margin:2px 0 4px}
         <div style="display:flex;gap:8px;align-items:center;margin:6px 0">
             <button id="btnTv" class="btn" style="padding:6px 14px;font-size:13px">📊 نمای TradingView</button>
           </div>
-          <div id="tvBox" style="display:none;height:440px;border-radius:14px;overflow:hidden;border:1px solid var(--line)">
+          <div id="tvBox" style="display:none;height:500px;border-radius:14px;overflow:hidden;border:1px solid var(--line)">
             <!-- TradingView Advanced Chart Widget -->
             <div class="tradingview-widget-container" id="tvContainer">
               <div id="tvWidget"></div>
@@ -582,6 +583,7 @@ function refreshTV(){
 }
 $("btnTv").onclick=()=>{
   _tvShown=!_tvShown;
+  document.getElementById("tvBox").classList.toggle("tv-fixed",_tvShown);
   document.getElementById("tvBox").style.display=_tvShown?"block":"none";
   document.getElementById("chartBox").style.display=_tvShown?"none":"block";
   $("btnTv").textContent=_tvShown?"📊 نمای داخلی":"📊 نمای TradingView";
