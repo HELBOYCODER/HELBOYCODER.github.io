@@ -539,7 +539,7 @@ function renderChart(){
   const g=cv.getContext("2d");g.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
   g.clearRect(0,0,W,H);
   if(!candles.length)return;
-  const padR=64,padT=10,padB=24,volH=50;
+  const padR=64,padT=14,padB=34,volH=46;
   const plotW=W-padR-8,plotH=H-padT-padB-volH;
   let lo=Infinity,hi=-Infinity;
   for(const c of candles){lo=Math.min(lo,c.l);hi=Math.max(hi,c.h)}
@@ -573,6 +573,15 @@ function renderChart(){
     line(s.sl,"#ff7b94",[5,3],"SL");
     (s.tps||[]).forEach((v,i)=>line(v,"#63e2a3",[5,3],"TP"+(i+1)));
   }
+  // live signal markers: pin each parsed signal at its entry (or last candle)
+  sigLevels.forEach((s,si)=>{
+    const idx=n-1-si*0; // most recent signals pinned to the last candles
+    const px=s.entry||candles[idx].c, yy=y(px);
+    const col=/#63e2a3/; // neutral marker color
+    g.fillStyle="#f4c873";
+    g.beginPath();g.moveTo(x(idx),yy-9);g.lineTo(x(idx)-5,yy-1);g.lineTo(x(idx)+5,yy-1);g.closePath();g.fill();
+    g.font="8px Vazirmatn,monospace";g.fillStyle="rgba(244,200,115,.9)";
+  });
   const last=candles[n-1].c;
   g.strokeStyle="rgba(88,225,209,.7)";g.setLineDash([2,3]);
   g.beginPath();g.moveTo(8,y(last));g.lineTo(8+plotW,y(last));g.stroke();g.setLineDash([]);
