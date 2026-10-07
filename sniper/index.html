@@ -453,6 +453,8 @@ $("btnLogin").onclick=async()=>{
 $("inP").addEventListener("keydown",e=>{if(e.key==="Enter")$("btnLogin").click()});
 $("inU").addEventListener("keydown",e=>{if(e.key==="Enter")$("inP").focus()});
 function enter(kind){
+  document.querySelector(".shell").classList.add("on");
+  $("s-landing").style.display="none";
   window.genUser=genUser;window.showLogin=()=>{$("s-landing").style.display="none";$("v-login").style.display="block"};
   if($("s-landing"))$("s-landing").style.display="block";
   $("adminNav").style.display=kind==="admin"?"block":"none";
