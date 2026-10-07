@@ -409,6 +409,17 @@ function genUser(){
 }
 </script>
 <script>
+/*host-split*/
+  const _isAdminHost=/^admin\./.test(location.hostname);
+  if(_isAdminHost){
+    if($("s-landing"))$("s-landing").style.display="none";
+    ["dash","news","charts","signals"].forEach(k=>{const n=document.querySelector(`[data-s="${k}"]`);if(n)n.style.display="none";
+      const sec=document.getElementById("s-"+k);if(sec)sec.style.display="none";});
+    document.title="Sniper Admin";
+  }else{
+    ["users","bot","system"].forEach(k=>{const n=document.querySelector(`[data-s="${k}"]`);if(n)n.style.display="none";
+      const sec=document.getElementById("s-"+k);if(sec)sec.style.display="none";});
+  }
 const API="https://sniper-web.quilt-refract.workers.dev";
 const OKX="https://www.okx.com/api/v5";
 const $=i=>document.getElementById(i);
@@ -441,16 +452,6 @@ $("btnLogin").onclick=async()=>{
 $("inP").addEventListener("keydown",e=>{if(e.key==="Enter")$("btnLogin").click()});
 $("inU").addEventListener("keydown",e=>{if(e.key==="Enter")$("inP").focus()});
 function enter(kind){
-  const _isAdminHost=/^admin\./.test(location.hostname);
-  if(_isAdminHost){
-    if($("s-landing"))$("s-landing").style.display="none";
-    ["dash","news","charts","signals"].forEach(k=>{const n=document.querySelector(`[data-s="${k}"]`);if(n)n.style.display="none";
-      const sec=document.getElementById("s-"+k);if(sec)sec.style.display="none";});
-    document.title="Sniper Admin";
-  }else{
-    ["users","bot","system"].forEach(k=>{const n=document.querySelector(`[data-s="${k}"]`);if(n)n.style.display="none";
-      const sec=document.getElementById("s-"+k);if(sec)sec.style.display="none";});
-  }
   window.genUser=genUser;window.showLogin=()=>{$("s-landing").style.display="none";$("v-login").style.display="block"};
   if($("s-landing"))$("s-landing").style.display="block";
   $("adminNav").style.display=kind==="admin"?"block":"none";
