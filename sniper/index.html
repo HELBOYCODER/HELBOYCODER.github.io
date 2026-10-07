@@ -488,7 +488,7 @@ function render(s){
   const on=s.bot_enabled;
   $("stBot").innerHTML=on?'🟢 فعال':'🔴 خاموش';
   $("stBotSub").textContent=on?"در حال رصد بازار":"متوقف توسط ادمین";
-  $("stSig").textContent=fa((s.signals||[]).length);
+  const _stSig=$("stSig");if(_stSig)_stSig.textContent=fa((s.signals||[]).length);
   $("stNews").textContent=fa((s.news||[]).length);
   $("stSubs").textContent=fa(s.subs);
   $("cSig").textContent=fa((s.signals||[]).length);$("cNews").textContent=fa((s.news||[]).length);
