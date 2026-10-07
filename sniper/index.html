@@ -216,7 +216,16 @@ h1.page{font-size:19px;margin:2px 0 4px}
           <span id="pxChg" class="pill"></span>
           <span style="margin-right:auto" class="updated" id="chartUpd"></span>
         </div>
-        <div id="chartBox"><canvas id="chartCv"></canvas><div class="chart-tip" id="ctip"></div></div>
+        <div style="display:flex;gap:8px;align-items:center;margin:6px 0">
+            <button id="btnTv" class="btn" style="padding:6px 14px;font-size:13px">📊 نمای TradingView</button>
+          </div>
+          <div id="tvBox" style="display:none;height:440px;border-radius:14px;overflow:hidden;border:1px solid var(--line)">
+            <!-- TradingView Advanced Chart Widget -->
+            <div class="tradingview-widget-container" id="tvContainer">
+              <div id="tvWidget"></div>
+            </div>
+          </div>
+          <div id="chartBox"><canvas id="chartCv"></canvas><div class="chart-tip" id="ctip"></div></div>
         <div class="legend">
           <span><i style="background:var(--green)"></i>TP</span>
           <span><i style="background:var(--red)"></i>SL</span>
@@ -551,6 +560,34 @@ function startChartLoop(){
   setInterval(()=>{fill();if($("s-charts").classList.contains("on"))drawChart()},20000);
 }
 $("selInst").onchange=drawChart;$("selBar").onchange=drawChart;
+/* ---- TradingView Advanced Chart (embed, free) ---- */
+let _tvReady=false,_tvShown=false;
+function tvSymbol(){const v=$("selInst").value.replace("-USDT","")+"USDT";return "OKX:"+v;}
+function loadTV(){
+  if(_tvReady){refreshTV();return}
+  const sc=document.createElement("script");
+  sc.src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
+  sc.async=true;
+  sc.innerHTML=JSON.stringify({
+    autosize:true,symbol:tvSymbol(),interval:$("selBar").value.replace("m",""),
+    timezone:"Asia/Tehran",theme:"dark",style:"1",locale:"fa_IR",
+    hide_side_toolbar:false,allow_symbol_change:false,
+    support_host:"https://www.tradingview.com"});
+  document.getElementById("tvWidget").appendChild(sc);
+  _tvReady=true;
+}
+function refreshTV(){
+  const box=document.getElementById("tvBox");
+  box.innerHTML='<div id="tvWidget"></div>';_tvReady=false;loadTV();
+}
+$("btnTv").onclick=()=>{
+  _tvShown=!_tvShown;
+  document.getElementById("tvBox").style.display=_tvShown?"block":"none";
+  document.getElementById("chartBox").style.display=_tvShown?"none":"block";
+  $("btnTv").textContent=_tvShown?"📊 نمای داخلی":"📊 نمای TradingView";
+  if(_tvShown)loadTV();
+};
+$("selInst").addEventListener("change",()=>{if(_tvShown&&_tvReady)refreshTV()});
 async function drawChart(){
   const inst=$("selInst").value,bar=$("selBar").value;
   if(!inst)return;
