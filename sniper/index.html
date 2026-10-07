@@ -175,7 +175,8 @@ $("btnLogin").onclick=async()=>{
     }else{
       const r=await api("/api/login",{method:"POST",body:JSON.stringify({username:$("inUser").value,password:$("inPass").value})});
       if(!r.ok){$("loginErr").textContent=r.error||"خطا";return}
-      session=r.session; localStorage.setItem("sniper_session",session); localStorage.setItem("sniper_uname",$("inUser").value);
+      session=r.session; localStorage.setItem("sniper_session",session); localStorage.setItem("sniper_uname",$("inUser").value||"تریدر");
+      $("uname").textContent=localStorage.getItem("sniper_uname");
       showView("user");
     }
   }catch(e){$("loginErr").textContent="خطای شبکه"}
