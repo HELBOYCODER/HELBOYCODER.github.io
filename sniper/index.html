@@ -460,7 +460,17 @@ async function runHealth(){
 /* ---------- prices ---------- */
 async function loadPrices(){
   try{
-    prices=await api("/api/prices");
+    let d={};
+    try{
+      const r=await fetch(`${OKX}/market/tickers?instType=SPOT`);
+      const j=await r.json();
+      const want=["BTC","ETH","SOL","BNB","XRP","DOGE","AVAX","LINK","TON","ADA","PEPE","WIF"];
+      for(const t of (j.data||[])) if(t.instId.endsWith("-USDT")){
+        const b=t.instId.split("-")[0];
+        if(want.includes(b)) d[b]={last:+t.last,chg:+(t.open24h?((+t.last-+t.open24h)/+t.open24h*100).toFixed(2):0)};
+      }
+    }catch(e){ d=await api("/api/prices"); }
+    prices=d;
     const order=["BTC","ETH","SOL","BNB","XRP","DOGE","AVAX","LINK","TON","ADA","PEPE","WIF"];
     $("pstrip").innerHTML=order.filter(b=>prices[b]).map(b=>{
       const p=prices[b];
