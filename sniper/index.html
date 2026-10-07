@@ -4,251 +4,601 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#090d18">
-<title>Sniper | داشبورد سیگنال</title>
+<title>Sniper Pro | داشبورد معاملات</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#080c16;--panel:rgba(19,25,41,.68);--line:rgba(177,195,236,.105);--muted:#8e9bb4;--text:#edf2ff;--cyan:#58e1d1;--blue:#7394ff;--purple:#bb91ff;--green:#63e2a3;--red:#ff7b94;--gold:#f4c873;--r:20px;--shadow:0 22px 70px rgba(0,0,0,.34)}
-*{box-sizing:border-box}body{margin:0;min-height:100vh;color:var(--text);background:radial-gradient(ellipse at 80% -10%,rgba(108,106,255,.17),transparent 34%),radial-gradient(ellipse at 3% 45%,rgba(27,196,193,.08),transparent 28%),var(--bg);font-family:Vazirmatn,Tahoma,Arial,sans-serif;font-size:14px;line-height:1.7}
-body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.2;background-image:radial-gradient(rgba(209,221,255,.5) .65px,transparent .65px);background-size:25px 25px;mask-image:linear-gradient(to bottom,black,transparent 78%)}
-button,input{font:inherit;color:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
-.app{position:relative;max-width:1240px;margin:auto;padding:26px 28px 42px}
-.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 2px 20px;border-bottom:1px solid rgba(255,255,255,.07)}
-.brand{display:flex;align-items:center;gap:12px}
-.brand-mark{width:42px;height:42px;display:grid;place-items:center;border-radius:14px;background:linear-gradient(145deg,rgba(89,224,209,.24),rgba(111,131,255,.23));border:1px solid rgba(130,224,227,.28);font-size:20px}
-.brand-name{font-size:17px;font-weight:800}.brand-name span{color:var(--cyan)}.brand-sub{font-size:10px;color:var(--muted);margin-top:-3px}
-.top-actions{display:flex;gap:10px;align-items:center}
-.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:11px;border:1px solid var(--line);background:rgba(255,255,255,.035);color:#dfe7f7;font-size:12px;transition:.22s}
-.btn:hover{transform:translateY(-2px);border-color:rgba(88,225,209,.3)}
-.btn.primary{background:linear-gradient(100deg,#52d9cb,#7693ff);color:#07131b;border:0;font-weight:700}
-.glass{border:1px solid var(--line);border-radius:var(--r);background:linear-gradient(145deg,rgba(24,31,50,.75),rgba(13,18,31,.72));backdrop-filter:blur(20px);box-shadow:0 15px 45px rgba(0,0,0,.18)}
-.login-wrap{min-height:70vh;display:grid;place-items:center}
-.login-card{width:min(420px,92vw);padding:34px 30px;text-align:center}
-.login-card h2{margin:14px 0 4px;font-size:20px}.login-card p{color:var(--muted);font-size:11px;margin:0 0 22px}
-.field{margin-bottom:12px;text-align:right}
-.field label{display:block;font-size:10px;color:var(--muted);margin-bottom:5px}
-.field input{width:100%;padding:11px 13px;border-radius:12px;border:1px solid var(--line);background:rgba(6,11,21,.4);font-size:13px}
-.field input:focus{border-color:rgba(88,225,209,.4);outline:none}
-.tabs{display:flex;gap:8px;padding:5px;border:1px solid var(--line);border-radius:14px;background:rgba(18,24,38,.65);margin-bottom:22px}
-.tab{flex:1;border:0;background:transparent;color:var(--muted);padding:9px;border-radius:10px;font-size:12px;transition:.25s}
-.tab.active{color:#eafcff;background:rgba(81,219,202,.13);box-shadow:inset 0 0 0 1px rgba(81,219,202,.17)}
-.err{color:var(--red);font-size:11px;min-height:18px;margin-bottom:8px}
-.view{display:none}.view.on{display:block;animation:appear .4s ease both}
-@keyframes appear{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-.grid{display:grid;gap:14px}
-.stats{grid-template-columns:repeat(4,minmax(0,1fr));margin:18px 0}
-.stat{padding:16px;min-height:108px}.stat-top{display:flex;justify-content:space-between;color:#99a7bf;font-size:10px;align-items:center}
-.stat-number{font-size:23px;font-weight:700;margin-top:10px}.stat-number small{font-size:11px;color:#a8b3c9;font-weight:500}
-.stat-change{font-size:9px;color:var(--green);margin-top:6px}
-.two{grid-template-columns:minmax(0,1.5fr) minmax(260px,1fr)}
-.card{padding:18px}
+:root{--bg:#080c16;--line:rgba(177,195,236,.105);--muted:#8e9bb4;--text:#edf2ff;--cyan:#58e1d1;--blue:#7394ff;--purple:#bb91ff;--green:#63e2a3;--red:#ff7b94;--gold:#f4c873;--r:18px}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;color:var(--text);background:radial-gradient(ellipse at 80% -10%,rgba(108,106,255,.15),transparent 34%),radial-gradient(ellipse at 3% 45%,rgba(27,196,193,.07),transparent 28%),var(--bg);font-family:Vazirmatn,Tahoma,sans-serif;font-size:14px;line-height:1.7}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.16;background-image:radial-gradient(rgba(209,221,255,.5) .65px,transparent .65px);background-size:25px 25px}
+button,input,select{font:inherit;color:inherit}button{cursor:pointer;border:0}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.app{max-width:1400px;margin:auto;padding:18px 20px 40px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:14px;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,.07);flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:11px}
+.brand-mark{width:40px;height:40px;display:grid;place-items:center;border-radius:13px;background:linear-gradient(145deg,rgba(89,224,209,.24),rgba(111,131,255,.23));border:1px solid rgba(130,224,227,.28);font-size:19px}
+.brand-name{font-weight:800;font-size:16px}.brand-name b{color:var(--cyan)}
+.brand-sub{font-size:9px;color:var(--muted);margin-top:-4px}
+.top-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.clock{font-size:11px;color:var(--muted)}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 14px;border-radius:11px;border:1px solid var(--line);background:rgba(255,255,255,.035);color:#dfe7f7;font-size:12px;transition:.2s;text-decoration:none}
+.btn:hover{transform:translateY(-1px);border-color:rgba(88,225,209,.3)}
+.btn.primary{background:linear-gradient(100deg,#52d9cb,#7693ff);color:#07131b;font-weight:700;border:0}
+.btn.danger{color:var(--red);border-color:rgba(255,123,148,.3)}
+.btn.sm{padding:5px 10px;font-size:10px;border-radius:9px}
+.glass{border:1px solid var(--line);border-radius:var(--r);background:linear-gradient(145deg,rgba(24,31,50,.75),rgba(13,18,31,.72));backdrop-filter:blur(20px);box-shadow:0 14px 44px rgba(0,0,0,.2)}
+.card{padding:16px 18px}
 .card-title{font-size:13px;font-weight:700}.card-sub{font-size:10px;color:var(--muted);margin-top:2px}
-.sig{border:1px solid rgba(255,255,255,.055);border-radius:12px;padding:12px 14px;margin-bottom:10px;background:rgba(6,11,21,.25)}
-.sig-head{display:flex;justify-content:space-between;align-items:center}
-.pair{font-weight:700;direction:ltr}
-.pill{font-size:9px;border-radius:7px;padding:3px 8px}
-.buy{background:rgba(99,226,163,.1);color:var(--green)}.sell{background:rgba(255,123,148,.1);color:var(--red)}
-.pill.gold{background:rgba(244,200,115,.1);color:var(--gold)}
-.sig-text{font-size:11px;color:#c3cede;margin-top:8px;white-space:pre-wrap;word-break:break-word}
-.pulse{width:7px;height:7px;border-radius:50%;background:var(--green);display:inline-block;box-shadow:0 0 0 4px rgba(99,226,163,.09);animation:pp 2s infinite}
-@keyframes pp{0%,100%{box-shadow:0 0 0 4px rgba(99,226,163,.09)}50%{box-shadow:0 0 0 7px rgba(99,226,163,0)}}
+.pulse{width:7px;height:7px;border-radius:50%;background:var(--green);display:inline-block;animation:pp 2s infinite}
+@keyframes pp{0%,100%{box-shadow:0 0 0 3px rgba(99,226,163,.1)}50%{box-shadow:0 0 0 7px rgba(99,226,163,0)}}
+.pill{font-size:9px;border-radius:7px;padding:3px 9px;direction:ltr}
+.pill.buy{background:rgba(99,226,163,.11);color:var(--green)}
+.pill.sell{background:rgba(255,123,148,.11);color:var(--red)}
+.pill.gold{background:rgba(244,200,115,.11);color:var(--gold)}
+.empty{color:#68758c;font-size:11px;padding:18px 0;text-align:center}
+.login-wrap{min-height:78vh;display:grid;place-items:center}
+.login-card{width:min(430px,94vw);padding:32px 28px;text-align:center}
+.login-card .big{font-size:34px}.login-card h2{margin:12px 0 4px;font-size:20px}.login-card p{color:var(--muted);font-size:11px;margin:0 0 20px}
+.tabs{display:flex;gap:8px;padding:5px;border:1px solid var(--line);border-radius:14px;background:rgba(18,24,38,.65);margin-bottom:20px}
+.tab{flex:1;background:transparent;color:var(--muted);padding:9px;border-radius:10px;font-size:12px}
+.tab.active{color:#eafcff;background:rgba(81,219,202,.13);box-shadow:inset 0 0 0 1px rgba(81,219,202,.17)}
+.field{margin-bottom:11px;text-align:right}
+.field label{display:block;font-size:10px;color:var(--muted);margin-bottom:4px}
+.field input{width:100%;padding:11px 13px;border-radius:12px;border:1px solid var(--line);background:rgba(6,11,21,.4);font-size:13px}
+.err{color:var(--red);font-size:11px;min-height:17px;margin-bottom:8px}
+.shell{display:none;gap:20px;padding-top:18px}
+.shell.on{display:grid;grid-template-columns:225px minmax(0,1fr)}
+.side{position:sticky;top:14px;align-self:start}
+.side-card{padding:13px 11px}
+.side-label{font-size:9px;color:#68758c;padding:4px 10px 8px}
+.slink{width:100%;display:flex;align-items:center;gap:10px;padding:10px 11px;border-radius:11px;background:transparent;color:#9aa7bd;font-size:12px;text-align:right;margin:2px 0;transition:.2s}
+.slink:hover{background:rgba(255,255,255,.04);color:#eaf3ff}
+.slink.active{background:linear-gradient(100deg,rgba(76,224,204,.13),rgba(94,126,255,.07));color:#d9fff9;box-shadow:inset -2px 0 var(--cyan)}
+.slink .cnt{margin-right:auto;font:10px monospace;color:var(--cyan);background:rgba(88,225,209,.1);border-radius:7px;padding:1px 7px}
+.sep{height:1px;background:var(--line);margin:11px 6px}
+.mini-status{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:600;color:#d7e5f2;padding:11px 10px 8px}
+.side-foot{font-size:9px;color:var(--muted);padding:0 10px}
+.sec{display:none}.sec.on{display:block;animation:appear .35s ease both}
+@keyframes appear{from{opacity:0;transform:translateY(8px)}to{opacity:1}}
+h1.page{font-size:19px;margin:2px 0 4px}
+.crumb{font-size:10px;color:var(--cyan);display:flex;gap:7px;align-items:center;margin-bottom:6px}
+.grid{display:grid;gap:13px}
+.stats{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:14px}
+.stat{padding:14px 15px;min-height:100px}
+.stat-top{display:flex;justify-content:space-between;color:#99a7bf;font-size:10px;align-items:center}
+.stat-num{font-size:22px;font-weight:700;margin-top:8px}
+.stat-chg{font-size:9px;color:var(--green);margin-top:5px}
+.two{grid-template-columns:minmax(0,1.55fr) minmax(270px,1fr)}
+.two-eq{grid-template-columns:1fr 1fr}
+.pstrip{display:flex;gap:9px;overflow-x:auto;padding:10px 2px;margin-bottom:12px;scrollbar-width:thin}
+.pchip{flex:none;display:flex;align-items:center;gap:8px;padding:8px 13px;border:1px solid var(--line);border-radius:12px;background:rgba(18,24,38,.7);font-size:11px;direction:ltr;cursor:pointer}
+.pchip b{font-size:12px}.pchip .up{color:var(--green);font-size:9px}.pchip .dn{color:var(--red);font-size:9px}
+.chart-tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.chart-tools select{padding:7px 10px;border-radius:10px;border:1px solid var(--line);background:rgba(6,11,21,.4);font-size:11px}
+#chartBox{width:100%;height:420px;position:relative;direction:ltr}
+#chartCv{width:100%;height:100%;display:block}
+.chart-tip{position:absolute;pointer-events:none;background:rgba(13,20,34,.94);border:1px solid var(--line);border-radius:10px;padding:7px 11px;font-size:10px;direction:ltr;display:none;z-index:3;white-space:nowrap}
+.legend{display:flex;gap:14px;font-size:9px;color:#8997ae;margin-top:8px;flex-wrap:wrap}
+.legend i{display:inline-block;width:8px;height:8px;border-radius:3px;margin-left:4px;vertical-align:-1px}
+.sig{border:1px solid rgba(255,255,255,.055);border-radius:12px;padding:12px 14px;margin-bottom:9px;background:rgba(6,11,21,.25)}
+.sig-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.pair{font-weight:700;direction:ltr;cursor:pointer}
+.pair:hover{color:var(--cyan)}
+.sig-text{font-size:11px;color:#c3cede;margin-top:7px;white-space:pre-wrap;word-break:break-word}
+.user-row{display:grid;grid-template-columns:1fr auto auto auto;gap:10px;align-items:center;padding:10px 2px;border-bottom:1px solid rgba(255,255,255,.05);font-size:12px}
+.user-row:last-child{border-bottom:0}
+.st{font-size:9px}.st.on{color:var(--green)}.st.off{color:var(--red)}
+.mini{border:1px solid var(--line);background:transparent;border-radius:8px;padding:4px 10px;font-size:10px;color:#c9d4e6}
+.mini.del{color:var(--red);border-color:rgba(255,123,148,.25)}
 .news-item{display:flex;gap:8px;font-size:11px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.045)}
 .news-item:last-child{border-bottom:0}
 .news-item span:last-child{direction:ltr;unicode-bidi:isolate;text-align:right;flex:1}
-.user-row{display:grid;grid-template-columns:1fr auto auto auto;gap:10px;align-items:center;padding:10px 2px;border-bottom:1px solid rgba(255,255,255,.05);font-size:12px}
-.user-row:last-child{border-bottom:0}
-.user-state{font-size:9px}.st-active{color:var(--green)}.st-expired{color:var(--red)}
-.mini-btn{border:1px solid var(--line);background:transparent;border-radius:8px;padding:4px 10px;font-size:10px;color:#c9d4e6}
-.mini-btn.del{color:var(--red);border-color:rgba(255,123,148,.25)}
 .form-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
 .form-row input{flex:1;min-width:110px;padding:9px 11px;border-radius:10px;border:1px solid var(--line);background:rgba(6,11,21,.4);font-size:12px}
-.toast{position:fixed;left:24px;bottom:24px;padding:12px 16px;border:1px solid rgba(88,225,209,.2);border-radius:13px;background:rgba(17,26,42,.94);font-size:12px;opacity:0;transform:translateY(12px);transition:.3s;pointer-events:none;z-index:9}
+.toast{position:fixed;left:24px;bottom:24px;padding:12px 16px;border:1px solid rgba(88,225,209,.2);border-radius:13px;background:rgba(17,26,42,.94);font-size:12px;opacity:0;transform:translateY(12px);transition:.3s;pointer-events:none;z-index:20}
 .toast.show{opacity:1;transform:none}
-.clock{font-size:11px;color:var(--muted)}
 .updated{font-size:9px;color:#68758c}
-.empty{color:#68758c;font-size:11px;padding:16px 0;text-align:center}
-@media(max-width:900px){.stats{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}.app{padding:16px 14px 40px}}
+.badge{font-size:9px;padding:4px 9px;border-radius:7px}
+.badge.on{color:var(--green);background:rgba(99,226,163,.09)}
+.badge.off{color:var(--red);background:rgba(255,123,148,.09)}
+.kv{display:flex;justify-content:space-between;font-size:11px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04);gap:10px}
+.kv:last-child{border-bottom:0}
+.kv b{text-align:left;direction:ltr}
+@media(max-width:1000px){.shell.on{grid-template-columns:1fr}.side{position:static}.stats{grid-template-columns:repeat(2,1fr)}.two,.two-eq{grid-template-columns:1fr}.app{padding:14px 12px 40px}#chartBox{height:320px}}
 </style>
 </head>
 <body>
 <div class="app">
-<header class="topbar">
-  <div class="brand"><div class="brand-mark">🏹</div><div><div class="brand-name">Sniper<span>.</span></div><div class="brand-sub">داشبورد سیگنال هوشمند</div></div></div>
-  <div class="top-actions">
-    <span class="clock" id="clock"></span>
-    <button class="btn" id="logoutBtn" style="display:none">خروج</button>
-  </div>
-</header>
 
-<div class="view on login-wrap" id="v-login">
+<div id="v-login" class="login-wrap">
   <div class="glass login-card">
-    <div style="font-size:34px">🏹</div>
-    <h2>ورود به داشبورد</h2>
-    <p>با اکانت ربات تلگرام وارد شو یا به‌عنوان مدیر</p>
+    <div class="big">🏹</div>
+    <h2>Sniper Pro</h2>
+    <p>داشبورد معاملات — نسخه وب</p>
     <div class="tabs">
-      <button class="tab active" id="tabUser">👤 کاربر</button>
-      <button class="tab" id="tabAdmin">👑 ادمین</button>
+      <button class="tab active" id="tabU">👤 کاربر</button>
+      <button class="tab" id="tabA">👑 ادمین</button>
     </div>
-    <div class="err" id="loginErr"></div>
-    <div class="field" id="fUser"><label>نام کاربری</label><input id="inUser" autocomplete="username"></div>
-    <div class="field" id="fPass"><label id="lblPass">رمز عبور</label><input id="inPass" type="password" autocomplete="current-password"></div>
+    <div class="err" id="lerr"></div>
+    <div class="field" id="fU"><label>نام کاربری</label><input id="inU" autocomplete="username"></div>
+    <div class="field"><label id="lblP">رمز عبور</label><input id="inP" type="password" autocomplete="current-password"></div>
     <button class="btn primary" style="width:100%;justify-content:center" id="btnLogin">ورود</button>
+    <div class="updated" style="margin-top:12px">🔒 اکانت‌ها با ربات تلگرام یکسان هستند</div>
   </div>
 </div>
 
-<div class="view" id="v-user">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-top:18px;flex-wrap:wrap;gap:10px">
-    <div><div style="font-size:10px;color:var(--cyan)"><span class="pulse"></span> بازار زنده / نمای کاربر</div>
-    <h1 style="margin:4px 0 0;font-size:21px">سلام، <span id="uname"></span> ✦</h1></div>
-    <button class="btn primary" id="btnNow">🎯 تحلیل لحظه‌ای</button>
-  </div>
-  <div class="grid stats">
-    <div class="glass stat"><div class="stat-top">وضعیت ربات <span>🤖</span></div><div class="stat-number" id="stBot">—</div><div class="stat-change" id="stBotSub"></div></div>
-    <div class="glass stat"><div class="stat-top">سیگنال‌های اخیر <span>📡</span></div><div class="stat-number" id="stSigs">0</div><div class="stat-change">۲۰ شکار آخر</div></div>
-    <div class="glass stat"><div class="stat-top">اخبار پرتاثیر <span>📰</span></div><div class="stat-number" id="stNews">0</div><div class="stat-change">سنتیمنت شدید</div></div>
-    <div class="glass stat"><div class="stat-top">مشترکین فعال <span>👥</span></div><div class="stat-number" id="stSubs">0</div><div class="stat-change">دریافت شکار خودکار</div></div>
-  </div>
-  <div class="grid two">
-    <div class="glass card">
-      <div style="display:flex;justify-content:space-between"><div><div class="card-title">آخرین شکارها</div><div class="card-sub">خروجی موتور شکار وین‌ریت</div></div><span class="updated" id="updTime"></span></div>
-      <div id="sigList" style="margin-top:12px"><div class="empty">هنوز شکاری ثبت نشده</div></div>
+<div class="shell" id="shell">
+  <aside class="side"><div class="glass side-card">
+    <div class="mini-status"><span class="pulse"></span><span id="svcTxt">ربات فعال است</span></div>
+    <div class="side-foot" id="svcSub">آخرین سینک: —</div>
+    <div class="sep"></div>
+    <div class="side-label">فضای معاملاتی</div>
+    <button class="slink active" data-s="dash">📊 داشبورد</button>
+    <button class="slink" data-s="charts">📈 چارت زنده</button>
+    <button class="slink" data-s="signals">🎯 شکارها <span class="cnt" id="cSig">۰</span></button>
+    <button class="slink" data-s="news">📰 اخبار <span class="cnt" id="cNews">۰</span></button>
+    <button class="slink" data-s="account">👤 اکانت من</button>
+    <div id="adminNav" style="display:none">
+      <div class="sep"></div>
+      <div class="side-label">مدیریت (ادمین)</div>
+      <button class="slink" data-s="users">👥 کاربران</button>
+      <button class="slink" data-s="bot">🤖 کنترل ربات</button>
+      <button class="slink" data-s="system">⚙️ سیستم و دیباگ</button>
     </div>
-    <div class="glass card">
-      <div class="card-title">📰 اخبار پرتاثیر</div><div class="card-sub">فیلترشده با سنتیمنت شدید</div>
-      <div id="newsList" style="margin-top:8px"><div class="empty">خبری نیست</div></div>
-    </div>
-  </div>
-</div>
+    <div class="sep"></div>
+    <button class="btn danger sm" style="width:100%;justify-content:center" id="btnOut">🚪 خروج</button>
+  </div></aside>
 
-<div class="view" id="v-admin">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-top:18px;flex-wrap:wrap;gap:10px">
-    <div><div style="font-size:10px;color:var(--purple)"><span class="pulse" style="background:var(--purple)"></span> محیط مدیریت</div>
-    <h1 style="margin:4px 0 0;font-size:21px">پنل ادمین <span style="color:var(--purple)">✦</span></h1></div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button class="btn" id="btnBotToggle">🤖 ربات: —</button>
-      <button class="btn primary" id="btnAddUser">➕ ساخت اکانت</button>
-    </div>
-  </div>
-  <div class="grid stats">
-    <div class="glass stat"><div class="stat-top">اکانت‌ها <span>👤</span></div><div class="stat-number" id="adUsers">0</div></div>
-    <div class="glass stat"><div class="stat-top">فعال <span>🟢</span></div><div class="stat-number" id="adActive">0</div></div>
-    <div class="glass stat"><div class="stat-top">منقضی <span>🔴</span></div><div class="stat-number" id="adExpired">0</div></div>
-    <div class="glass stat"><div class="stat-top">مشترکین <span>📢</span></div><div class="stat-number" id="adSubs">0</div></div>
-  </div>
-  <div class="grid two">
-    <div class="glass card">
-      <div class="card-title">مدیریت کاربران</div><div class="card-sub">اکانت‌های ربات (تلگرام + وب)</div>
-      <div id="userList" style="margin-top:8px"></div>
-      <div class="form-row" id="addForm" style="display:none">
-        <input id="nuUser" placeholder="نام کاربری">
-        <input id="nuPass" placeholder="رمز عبور" type="password">
-        <input id="nuDays" placeholder="روز (0=بی‌نهایت)" style="max-width:150px" type="number" min="0">
-        <button class="btn primary" id="btnConfirmAdd">تایید و ساخت</button>
-        <button class="btn" id="btnCancelAdd">انصراف</button>
+  <main>
+    <section class="sec on" id="s-dash">
+      <div class="crumb"><span class="pulse"></span> بازار زنده / نمای کلی</div>
+      <h1 class="page" id="hello">سلام 👋</h1>
+      <div class="pstrip" id="pstrip"></div>
+      <div class="grid stats">
+        <div class="glass stat"><div class="stat-top">وضعیت ربات <span>🤖</span></div><div class="stat-num" id="stBot">—</div><div class="stat-chg" id="stBotSub"></div></div>
+        <div class="glass stat"><div class="stat-top">شکارهای اخیر <span>🎯</span></div><div class="stat-num" id="stSig">۰</div><div class="stat-chg">۲۰ مورد آخر</div></div>
+        <div class="glass stat"><div class="stat-top">اخبار پرتاثیر <span>📰</span></div><div class="stat-num" id="stNews">۰</div><div class="stat-chg">سنتیمنت شدید</div></div>
+        <div class="glass stat"><div class="stat-top">مشترکین <span>👥</span></div><div class="stat-num" id="stSubs">۰</div><div class="stat-chg">دریافت خودکار</div></div>
       </div>
-    </div>
-    <div class="glass card">
-      <div class="card-title">📰 اخبار پرتاثیر</div><div class="card-sub">فید زنده موتور اخبار</div>
-      <div id="adNewsList" style="margin-top:8px"><div class="empty">خبری نیست</div></div>
-    </div>
-  </div>
+      <div class="grid two">
+        <div class="glass card">
+          <div style="display:flex;justify-content:space-between"><div><div class="card-title">آخرین شکارها</div><div class="card-sub">روی نماد بزن تا چارت زنده‌اش باز شود</div></div><span class="updated" id="upd1"></span></div>
+          <div id="sigDash" style="margin-top:10px"></div>
+        </div>
+        <div class="glass card">
+          <div class="card-title">📰 اخبار پرتاثیر</div><div class="card-sub">فیلتر سنتیمنت شدید</div>
+          <div id="newsDash" style="margin-top:6px"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" id="s-charts">
+      <div class="crumb"><span class="pulse"></span> چارت زنده OKX</div>
+      <h1 class="page">📈 چارت و سیگنال‌ها</h1>
+      <div class="glass card">
+        <div class="chart-tools">
+          <select id="selInst"></select>
+          <select id="selBar">
+            <option value="1m">۱ دقیقه</option><option value="5m" selected>۵ دقیقه</option>
+            <option value="15m">۱۵ دقیقه</option><option value="1H">۱ ساعت</option><option value="4H">۴ ساعت</option>
+          </select>
+          <span id="pxNow" style="font-size:15px;font-weight:700"></span>
+          <span id="pxChg" class="pill"></span>
+          <span style="margin-right:auto" class="updated" id="chartUpd"></span>
+        </div>
+        <div id="chartBox"><canvas id="chartCv"></canvas><div class="chart-tip" id="ctip"></div></div>
+        <div class="legend">
+          <span><i style="background:var(--green)"></i>TP</span>
+          <span><i style="background:var(--red)"></i>SL</span>
+          <span><i style="background:var(--gold)"></i>ورود</span>
+          <span><i style="background:var(--blue)"></i>EMA20</span>
+          <span><i style="background:var(--purple)"></i>EMA50</span>
+          <span id="sigOnChart"></span>
+        </div>
+      </div>
+      <div class="grid two" style="margin-top:13px">
+        <div class="glass card"><div class="card-title">🎯 سیگنال‌های همین نماد</div><div id="sigForInst" style="margin-top:8px"></div></div>
+        <div class="glass card"><div class="card-title">💡 خوانش لحظه‌ای چارت</div><div class="card-sub">EMA + کندل‌خوانی زنده</div><div id="chartRead" style="margin-top:8px"></div></div>
+      </div>
+    </section>
+
+    <section class="sec" id="s-signals">
+      <div class="crumb"><span class="pulse"></span> آرشیو شکار</div>
+      <h1 class="page">🎯 همه شکارها</h1>
+      <div class="glass card"><div id="sigAll"></div></div>
+    </section>
+
+    <section class="sec" id="s-news">
+      <div class="crumb"><span class="pulse"></span> فید خبری</div>
+      <h1 class="page">📰 اخبار پرتاثیر</h1>
+      <div class="glass card"><div id="newsAll"></div></div>
+    </section>
+
+    <section class="sec" id="s-account">
+      <div class="crumb"><span class="pulse"></span> حساب کاربری</div>
+      <h1 class="page">👤 اکانت من</h1>
+      <div class="grid two-eq">
+        <div class="glass card">
+          <div class="card-title">اطلاعات اکانت</div>
+          <div style="margin-top:10px">
+            <div class="kv"><span>نام کاربری</span><b id="accU">—</b></div>
+            <div class="kv"><span>انقضا</span><b id="accExp" style="direction:rtl">—</b></div>
+            <div class="kv"><span>وضعیت ربات</span><b id="accBot" style="direction:rtl">—</b></div>
+          </div>
+        </div>
+        <div class="glass card">
+          <div class="card-title">📡 اتصال تلگرام</div>
+          <p class="card-sub" style="margin-top:8px">برای دریافت شکار با عکس چارت، به ربات پیام بده:</p>
+          <a class="btn primary" style="justify-content:center;margin-top:10px" href="https://t.me/TRADESIGNALERSAZbot" target="_blank">➕ باز کردن ربات تلگرام</a>
+          <p class="card-sub" style="margin-top:10px">در ربات: <code>/start</code> ← یوزرنیم ← پسورد ← دکمه «عضویت شکار خودکار»</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" id="s-users">
+      <div class="crumb" style="color:var(--purple)"><span class="pulse" style="background:var(--purple)"></span> پنل مدیریت</div>
+      <h1 class="page">👥 مدیریت کاربران</h1>
+      <div class="glass card">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+          <div><div class="card-title">اکانت‌ها</div><div class="card-sub">تلگرام و وب — یکسان</div></div>
+          <button class="btn primary sm" id="btnAddU">➕ اکانت جدید</button>
+        </div>
+        <div class="form-row" id="addForm" style="display:none">
+          <input id="nuU" placeholder="نام کاربری">
+          <input id="nuP" placeholder="رمز عبور" type="password">
+          <input id="nuD" placeholder="روز (۰=بی‌نهایت)" type="number" min="0" style="max-width:140px">
+          <button class="btn primary sm" id="btnDoAdd">تایید</button>
+          <button class="btn sm" id="btnNoAdd">انصراف</button>
+        </div>
+        <div id="userList" style="margin-top:8px"></div>
+      </div>
+    </section>
+
+    <section class="sec" id="s-bot">
+      <div class="crumb" style="color:var(--purple)"><span class="pulse" style="background:var(--purple)"></span> پنل مدیریت</div>
+      <h1 class="page">🤖 کنترل ربات</h1>
+      <div class="grid two-eq">
+        <div class="glass card">
+          <div class="card-title">وضعیت و کنترل</div>
+          <div style="margin-top:10px">
+            <div class="kv"><span>موتور شکار</span><b id="botSt" style="direction:rtl">—</b></div>
+            <div class="kv"><span>آخرین سینک</span><b id="botUpd" style="direction:rtl">—</b></div>
+            <div class="kv"><span>کانال تحویل</span><b style="direction:rtl">تلگرام + وب</b></div>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
+            <button class="btn primary" id="btnBotOn">🟢 روشن</button>
+            <button class="btn danger" id="btnBotOff">🔴 خاموش</button>
+            <button class="btn" id="btnResnow">⚡ شکار فوری</button>
+          </div>
+        </div>
+        <div class="glass card">
+          <div class="card-title">تنظیمات فعلی شکار</div>
+          <div style="margin-top:8px">
+            <div class="kv"><span>حداقل کانفیدنس</span><b>۷۲</b></div>
+            <div class="kv"><span>هم‌جهتی تایم‌فریم</span><b>3/3</b></div>
+            <div class="kv"><span>پرایس‌اکشن</span><b style="direction:rtl">ضد-هم‌سو حذف می‌کند</b></div>
+            <div class="kv"><span>گیت خبری</span><b style="direction:rtl">مخالف صریح = لغو</b></div>
+            <div class="kv"><span>ADX</span><b>≥۱۸</b></div>
+            <div class="kv"><span>صرافی داده</span><b>OKX</b></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" id="s-system">
+      <div class="crumb" style="color:var(--purple)"><span class="pulse" style="background:var(--purple)"></span> پنل مدیریت</div>
+      <h1 class="page">⚙️ سیستم و دیباگ</h1>
+      <div class="grid two-eq">
+        <div class="glass card">
+          <div class="card-title">سلامت سرویس‌ها</div>
+          <div style="margin-top:10px" id="healthList"><div class="empty">برای تست دکمه را بزن</div></div>
+          <button class="btn sm" style="margin-top:10px" id="btnHealth">🔄 تست مجدد</button>
+        </div>
+        <div class="glass card">
+          <div class="card-title">🧪 دیباگ لاگین</div>
+          <div class="card-sub" style="margin-top:6px">احراز هویت کاربران را زنده تست کن:</div>
+          <div class="form-row">
+            <input id="dbgU" placeholder="یوزرنیم">
+            <input id="dbgP" placeholder="پسورد" type="password">
+            <button class="btn sm" id="btnDbg">تست لاگین</button>
+          </div>
+          <div id="dbgOut" style="margin-top:10px;font-size:11px;direction:ltr;text-align:left;white-space:pre-wrap;word-break:break-all;color:#9fb0cc"></div>
+        </div>
+      </div>
+      <div class="glass card" style="margin-top:13px">
+        <div class="card-title">📋 Snapshot خام</div>
+        <div class="form-row"><button class="btn sm" id="btnRaw">نمایش JSON</button></div>
+        <div id="rawOut" style="margin-top:10px;font-size:10px;direction:ltr;text-align:left;max-height:300px;overflow:auto;white-space:pre;word-break:break-all;color:#9fb0cc"></div>
+      </div>
+    </section>
+  </main>
 </div>
 </div>
-<div class="toast" id="toast">انجام شد</div>
+<div class="toast" id="toast"></div>
+
 <script>
 const API="https://sniper-web.quilt-refract.workers.dev";
-const $=id=>document.getElementById(id);
-let mode="user", session=localStorage.getItem("sniper_session")||"", adminSession=localStorage.getItem("sniper_admin")||"";
-const toast=t=>{const el=$("toast");el.textContent=t;el.classList.add("show");setTimeout(()=>el.classList.remove("show"),2400)};
-async function api(p,opt={}){const r=await fetch(API+p,{...opt,headers:{"content-type":"application/json",...(session?{authorization:"Bearer "+session}:{}),...(opt.headers||{})}});return r.json()}
-setInterval(()=>{$("clock").textContent=new Date().toLocaleString("fa-IR",{weekday:"long",hour:"2-digit",minute:"2-digit"})},1000);
-$("tabUser").onclick=()=>{mode="user";$("tabUser").classList.add("active");$("tabAdmin").classList.remove("active");$("fUser").style.display="block";$("lblPass").textContent="رمز عبور"};
-$("tabAdmin").onclick=()=>{mode="admin";$("tabAdmin").classList.add("active");$("tabUser").classList.remove("active");$("fUser").style.display="none";$("lblPass").textContent="کد ادمین"};
-$("btnLogin").onclick=async()=>{
-  $("loginErr").textContent="";
-  try{
-    if(mode==="admin"){
-      const r=await api("/api/admin-login",{method:"POST",body:JSON.stringify({token:$("inPass").value})});
-      if(!r.ok){$("loginErr").textContent=r.error||"خطا";return}
-      adminSession=r.session; localStorage.setItem("sniper_admin",r.session); showView("admin");
-    }else{
-      const r=await api("/api/login",{method:"POST",body:JSON.stringify({username:$("inUser").value,password:$("inPass").value})});
-      if(!r.ok){$("loginErr").textContent=r.error||"خطا";return}
-      session=r.session; localStorage.setItem("sniper_session",session); localStorage.setItem("sniper_uname",$("inUser").value||"تریدر");
-      $("uname").textContent=localStorage.getItem("sniper_uname");
-      showView("user");
-    }
-  }catch(e){$("loginErr").textContent="خطای شبکه"}
-};
-$("inPass").addEventListener("keydown",e=>{if(e.key==="Enter")$("btnLogin").click()});
-$("inUser").addEventListener("keydown",e=>{if(e.key==="Enter")$("inPass").focus()});
-function showView(v){
-  $("v-login").classList.remove("on");$("v-user").classList.remove("on");$("v-admin").classList.remove("on");
-  $("v-"+v).classList.add("on");$("logoutBtn").style.display="inline-flex";
-  if(v!=="login")refresh();
-}
-$("logoutBtn").onclick=()=>{localStorage.clear();session="";adminSession="";$("logoutBtn").style.display="none";$("v-login").classList.add("on");$("v-user").classList.remove("on");$("v-admin").classList.remove("on")};
-(async()=>{
-  if(adminSession){showView("admin")}
-  else if(session){const r=await api("/api/state");if(r.ok){$("uname").textContent=localStorage.getItem("sniper_uname")||"تریدر";showView("user")}else{session="";localStorage.removeItem("sniper_session")}}
-})();
+const OKX="https://www.okx.com/api/v5";
+const $=i=>document.getElementById(i);
 const fa=n=>Number(n||0).toLocaleString("fa-IR");
 const dstr=t=>t?new Date(t).toLocaleString("fa-IR",{month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"}):"—";
-function renderState(s){
-  $("stBot").innerHTML=s.bot_enabled?'🟢 فعال':'🔴 خاموش';
-  $("stBotSub").textContent=s.bot_enabled?"در حال رصد بازار":"متوقف توسط ادمین";
-  $("stSigs").textContent=fa((s.signals||[]).length);
+let mode="user",session=localStorage.sniper_session||"",adminSess=localStorage.sniper_admin||"",me={};
+let state=null,prices={},candles=[],sigLevels=[];
+const toast=t=>{const e=$("toast");e.textContent=t;e.classList.add("show");setTimeout(()=>e.classList.remove("show"),2600)};
+async function api(p,opt={}){const r=await fetch(API+p,{...opt,headers:{"content-type":"application/json",...(opt.headers||{})}});return r.json()}
+const ah=()=>({authorization:"Bearer "+(adminSess||session)});
+
+/* ---------- login ---------- */
+$("tabU").onclick=()=>{mode="user";$("tabU").classList.add("active");$("tabA").classList.remove("active");$("fU").style.display="block";$("lblP").textContent="رمز عبور"};
+$("tabA").onclick=()=>{mode="admin";$("tabA").classList.add("active");$("tabU").classList.remove("active");$("fU").style.display="none";$("lblP").textContent="کد ادمین"};
+$("btnLogin").onclick=async()=>{
+  $("lerr").textContent="";
+  try{
+    if(mode==="admin"){
+      const r=await api("/api/admin-login",{method:"POST",body:JSON.stringify({token:$("inP").value})});
+      if(!r.ok){$("lerr").textContent=r.error||"خطا";return}
+      adminSess=r.session;localStorage.sniper_admin=adminSess;enter("admin");
+    }else{
+      const r=await api("/api/login",{method:"POST",body:JSON.stringify({username:$("inU").value.trim(),password:$("inP").value})});
+      if(!r.ok){$("lerr").textContent=r.error||"خطا";return}
+      session=r.session;localStorage.sniper_session=session;localStorage.sniper_uname=$("inU").value.trim();
+      me={username:$("inU").value.trim(),expires_at:r.expires_at};enter("user");
+    }
+  }catch(e){$("lerr").textContent="خطای شبکه — دوباره تلاش کن"}
+};
+$("inP").addEventListener("keydown",e=>{if(e.key==="Enter")$("btnLogin").click()});
+$("inU").addEventListener("keydown",e=>{if(e.key==="Enter")$("inP").focus()});
+function enter(kind){
+  $("v-login").style.display="none";$("shell").classList.add("on");
+  $("adminNav").style.display=kind==="admin"?"block":"none";
+  $("hello").textContent=kind==="admin"?"سلام، مدیر 👑":"سلام، "+(localStorage.sniper_uname||"تریدر")+" 👋";
+  if(kind==="admin")me={username:"__admin__",admin:true};
+  refresh();startChartLoop();
+}
+$("btnOut").onclick=()=>{localStorage.clear();location.reload()};
+(async()=>{
+  if(localStorage.sniper_admin){adminSess=localStorage.sniper_admin;enter("admin")}
+  else if(localStorage.sniper_session){const r=await api("/api/state");if(r.ok){me={username:localStorage.sniper_uname};enter("user")}else localStorage.clear()}
+})();
+
+/* ---------- nav ---------- */
+document.querySelectorAll(".slink").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll(".slink").forEach(x=>x.classList.remove("active"));
+  document.querySelectorAll(".sec").forEach(x=>x.classList.remove("on"));
+  b.classList.add("active");$("s-"+b.dataset.s).classList.add("on");
+  if(b.dataset.s==="charts")drawChart();
+  if(b.dataset.s==="system")runHealth();
+});
+
+/* ---------- state ---------- */
+async function refresh(){
+  try{
+    const s=await api("/api/state");
+    if(!s.ok)return;state=s;render(s);
+    if($("s-charts").classList.contains("on"))drawChart();
+  }catch(e){}
+}
+function render(s){
+  const on=s.bot_enabled;
+  $("stBot").innerHTML=on?'🟢 فعال':'🔴 خاموش';
+  $("stBotSub").textContent=on?"در حال رصد بازار":"متوقف توسط ادمین";
+  $("stSig").textContent=fa((s.signals||[]).length);
   $("stNews").textContent=fa((s.news||[]).length);
   $("stSubs").textContent=fa(s.subs);
-  $("updTime").textContent=s.updated?("به‌روزرسانی: "+dstr(s.updated)):"داده‌ای نرسیده";
-  const sigl=$("sigList");
-  sigl.innerHTML=(s.signals||[]).slice().reverse().map(x=>{
-    const short=/شورت|SHORT/.test(x.text), long=/لانگ|LONG/.test(x.text);
-    const nm=(x.text.match(/نماد:\*?\*? ([^\s]+)/)||["","—"])[1];
-    return `<div class="sig"><div class="sig-head"><span class="pair">${nm}</span>
+  $("cSig").textContent=fa((s.signals||[]).length);$("cNews").textContent=fa((s.news||[]).length);
+  $("upd1").textContent=s.updated?("سینک: "+dstr(s.updated)):"در انتظار اولین سینک…";
+  $("svcTxt").textContent=on?"ربات فعال است":"ربات خاموش است";
+  $("svcSub").textContent=s.updated?("آخرین سینک: "+dstr(s.updated)):"آخرین سینک: —";
+  $("botSt").innerHTML=on?'🟢 روشن':'🔴 خاموش';$("botUpd").textContent=dstr(s.updated);
+  $("accU").textContent=me.username||"—";
+  const u=(s.users||{})[me.username];
+  $("accExp").textContent=me.admin?"∞ (ادمین)":(u&&u.expires_at?dstr(u.expires_at*1000):"∞");
+  $("accBot").innerHTML=on?'🟢 فعال':'🔴 خاموش';
+  const sigHtml=(s.signals||[]).slice().reverse().map(x=>{
+    const short=/شورت|SHORT/i.test(x.text),long=/لانگ|LONG/i.test(x.text);
+    const nm=(x.text.match(/نماد:\*?\*?\s*([A-Z0-9]+)/i)||[])[1]||"—";
+    return `<div class="sig"><div class="sig-head">
+      <span class="pair" onclick="goChart('${nm}')">${nm}/USDT ↗</span>
       <span class="pill ${short?'sell':long?'buy':'gold'}">${short?'SHORT ▼':long?'LONG ▲':'—'}</span></div>
-      <div class="sig-text">${String(x.text).replace(/\*\*/g,"").slice(0,340)}</div></div>`;
-  }).join("")||'<div class="empty">هنوز شکاری ثبت نشده</div>';
-  const nl=(s.news||[]).map(n=>`<div class="news-item"><span>${n.sent>0?"🟢":"🔴"}</span><span>${n.coin?"["+n.coin+"] ":""}${String(n.title).slice(0,110)}</span></div>`).join("");
-  $("newsList").innerHTML=nl||'<div class="empty">خبری نیست</div>';
-  $("adNewsList").innerHTML=nl||'<div class="empty">خبری نیست</div>';
-  const users=s.users||{};let act=0,exp=0;const now=Date.now()/1000;
-  for(const u of Object.values(users)){if(u.expires_at&&now>u.expires_at)exp++;else act++}
-  $("adUsers").textContent=fa(Object.keys(users).length);
-  $("adActive").textContent=fa(act);$("adExpired").textContent=fa(exp);$("adSubs").textContent=fa(s.subs);
-  const ul=$("userList");
-  ul.innerHTML=Object.entries(users).map(([name,u])=>{
-    const expired=u.expires_at&&now>u.expires_at;
-    return `<div class="user-row"><strong>${name}</strong>
-      <span class="user-state ${expired?'st-expired':'st-active'}">${expired?'● منقضی':'● فعال'} · تا ${u.expires_at?dstr(u.expires_at*1000):'∞'}</span>
-      <span class="updated">${dstr((u.created_at||0)*1000)}</span>
-      <button class="mini-btn del" data-del="${name}">🗑</button></div>`;
+      <div class="sig-text">${String(x.text).replace(/\*\*/g,"").slice(0,420)}</div></div>`;
+  }).join("");
+  $("sigDash").innerHTML=sigHtml||'<div class="empty">هنوز شکاری ثبت نشده — موتور ساکت تا ستاپ وین‌ریت</div>';
+  $("sigAll").innerHTML=sigHtml||'<div class="empty">خالی</div>';
+  const nl=(s.news||[]).map(n=>`<div class="news-item"><span>${n.sent>0?"🟢":"🔴"}</span><span>${n.coin?"["+n.coin+"] ":""}${String(n.title).slice(0,120)}</span></div>`).join("");
+  $("newsDash").innerHTML=nl||'<div class="empty">خبری نیست</div>';
+  $("newsAll").innerHTML=nl||'<div class="empty">خبری نیست</div>';
+  const users=s.users||{};const now=Date.now()/1000;let act=0,exp=0;
+  for(const v of Object.values(users)){if(v.expires_at&&now>v.expires_at)exp++;else act++}
+  $("userList").innerHTML=Object.entries(users).map(([n,v])=>{
+    const x=v.expires_at&&now>v.expires_at;
+    return `<div class="user-row"><b>${n}</b>
+      <span class="st ${x?'off':'on'}">${x?'● منقضی':'● فعال'} · تا ${v.expires_at?dstr(v.expires_at*1000):'∞'}</span>
+      <span class="updated">${dstr((v.created_at||0)*1000)}</span>
+      <button class="mini del" data-del="${n}">🗑 حذف</button></div>`;
   }).join("")||'<div class="empty">اکانتی نیست</div>';
-  ul.querySelectorAll("[data-del]").forEach(b=>b.onclick=async()=>{
-    if(!confirm("اکانت «"+b.dataset.del+"» حذف شود؟"))return;
-    const r=await api("/api/admin/deluser",{method:"POST",headers:{authorization:"Bearer "+adminSession},body:JSON.stringify({username:b.dataset.del})});
-    toast(r.ok?"صف شد — ربات در چرخه بعد اعمال می‌کند":"خطا");refresh();
+  $("userList").querySelectorAll("[data-del]").forEach(b=>b.onclick=async()=>{
+    if(!confirm("«"+b.dataset.del+"» حذف شود؟"))return;
+    const r=await api("/api/admin/deluser",{method:"POST",headers:ah(),body:JSON.stringify({username:b.dataset.del})});
+    toast(r.ok?"در صف حذف — ربات اعمال می‌کند":"خطا");setTimeout(refresh,800);
   });
-  $("btnBotToggle").textContent=s.bot_enabled?"🤖 ربات: روشن":"🤖 ربات: خاموش";
 }
-async function refresh(){try{const s=await api("/api/state");if(s.ok)renderState(s)}catch(e){}}
-$("btnNow").onclick=()=>{toast("تحلیل در چرخه بعدی ربات انجام می‌شود");refresh()};
-setInterval(refresh,30000);
-$("btnBotToggle").onclick=async()=>{
-  const r0=await api("/api/state");const cur=r0.bot_enabled;
-  const r=await api("/api/admin/bot",{method:"POST",headers:{authorization:"Bearer "+adminSession},body:JSON.stringify({enabled:!cur})});
-  toast(r.ok?(!cur?"صف شد: روشن":"صف شد: خاموش"):(r.error||"خطا"));refresh();
-};
-$("btnAddUser").onclick=()=>{$("addForm").style.display=$("addForm").style.display==="none"?"flex":"none"};
-$("btnCancelAdd").onclick=()=>$("addForm").style.display="none";
-$("btnConfirmAdd").onclick=async()=>{
-  const u=$("nuUser").value.trim(),p=$("nuPass").value,d=parseInt($("nuDays").value||"0");
-  if(!u||!p){toast("نام کاربری و رمز لازم است");return}
-  const r=await api("/api/admin/adduser",{method:"POST",headers:{authorization:"Bearer "+adminSession},body:JSON.stringify({username:u,password:p,days:d})});
-  if(r.ok){toast("اکانت صف شد — ربات در چرخه بعد می‌سازد");$("nuUser").value="";$("nuPass").value="";$("nuDays").value="";$("addForm").style.display="none";refresh()}
+window.goChart=inst=>{document.querySelector('[data-s="charts"]').click();$("selInst").value=inst+"-USDT";drawChart()};
+
+/* ---------- admin actions ---------- */
+$("btnAddU").onclick=()=>{$("addForm").style.display=$("addForm").style.display==="none"?"flex":"none"};
+$("btnNoAdd").onclick=()=>$("addForm").style.display="none";
+$("btnDoAdd").onclick=async()=>{
+  const u=$("nuU").value.trim(),p=$("nuP").value,d=parseInt($("nuD").value||"0");
+  if(!u||!p){toast("یوزرنیم و رمز لازم است");return}
+  const r=await api("/api/admin/adduser",{method:"POST",headers:ah(),body:JSON.stringify({username:u,password:p,days:d})});
+  if(r.ok){toast("در صف ساخت — ربات می‌سازد");$("nuU").value="";$("nuP").value="";$("nuD").value="";$("addForm").style.display="none";setTimeout(refresh,800)}
   else toast(r.error||"خطا");
 };
+$("btnBotOn").onclick=async()=>{const r=await api("/api/admin/bot",{method:"POST",headers:ah(),body:JSON.stringify({enabled:true})});toast(r.ok?"روشن شد (اعمال در چرخه بعد)":"خطا");setTimeout(refresh,800)};
+$("btnBotOff").onclick=async()=>{const r=await api("/api/admin/bot",{method:"POST",headers:ah(),body:JSON.stringify({enabled:false})});toast(r.ok?"خاموش شد (اعمال در چرخه بعد)":"خطا");setTimeout(refresh,800)};
+$("btnResnow").onclick=async()=>{const r=await api("/api/admin/respawn",{method:"POST",headers:ah(),body:"{}"});toast(r.ok?"چرخه فوری صف شد — تا ~۱ دقیقه":"خطا")};
+$("btnDbg").onclick=async()=>{
+  $("dbgOut").textContent="testing…";
+  const t0=Date.now();
+  const r=await api("/api/login",{method:"POST",body:JSON.stringify({username:$("dbgU").value.trim(),password:$("dbgP").value})});
+  $("dbgOut").textContent=JSON.stringify({ok:r.ok,error:r.error||null,ms:Date.now()-t0,expires_at:r.expires_at||null},null,2);
+};
+$("btnRaw").onclick=()=>{$("rawOut").textContent=JSON.stringify(state,null,2).slice(0,6000)};
+$("btnHealth").onclick=runHealth;
+async function runHealth(){
+  const items=[];
+  const probe=async(n,p)=>{const t0=Date.now();try{await api(p);items.push([n,"✅ "+(Date.now()-t0)+"ms"])}catch(e){items.push([n,"❌ "+e.message])}};
+  await probe("Worker API","/api/state");
+  await probe("OKX candles","/api/klines?inst=BTC-USDT&bar=5m");
+  await probe("OKX prices","/api/prices");
+  items.push(["Snapshot age",state&&state.updated?Math.round((Date.now()-state.updated)/60000)+" دقیقه پیش":"—"]);
+  items.push(["قیمت زنده (مرورگر→OKX)",(await fetch(`${OKX}/market/tickers?instId=BTC-USDT`).then(r=>r.ok)).toString()]);
+  $("healthList").innerHTML=items.map(([k,v])=>`<div class="kv"><span>${k}</span><b>${v}</b></div>`).join("");
+}
+
+/* ---------- prices ---------- */
+async function loadPrices(){
+  try{
+    prices=await api("/api/prices");
+    const order=["BTC","ETH","SOL","BNB","XRP","DOGE","AVAX","LINK","TON","ADA","PEPE","WIF"];
+    $("pstrip").innerHTML=order.filter(b=>prices[b]).map(b=>{
+      const p=prices[b];
+      return `<div class="pchip" onclick="goChart('${b}')"><b>${b}</b><span>${p.last>=1000?p.last.toLocaleString("en-US",{maximumFractionDigits:0}):p.last}</span><span class="${p.chg>=0?'up':'dn'}">${p.chg>=0?'+':''}${p.chg}%</span></div>`;
+    }).join("");
+    const inst=$("selInst").value.split("-")[0];
+    if(prices[inst]&&$("s-charts").classList.contains("on")){
+      $("pxNow").textContent=prices[inst].last.toLocaleString("en-US");
+      $("pxChg").textContent=(prices[inst].chg>=0?'+':'')+prices[inst].chg+"%";
+      $("pxChg").className="pill "+(prices[inst].chg>=0?'buy':'sell');
+    }
+  }catch(e){}
+}
+
+/* ---------- live chart ---------- */
+function startChartLoop(){
+  const base=["BTC","ETH","SOL","XRP","DOGE","AVAX","LINK","TON","ADA","PEPE","WIF","BNB"];
+  const fill=()=>{
+    const fromSigs=(state&&state.signals||[]).map(x=>(x.text.match(/نماد:\*?\*?\s*([A-Z0-9]+)/i)||[])[1]).filter(Boolean);
+    const all=[...new Set([...base,...fromSigs])];
+    const cur=$("selInst").value;
+    $("selInst").innerHTML=all.map(b=>`<option value="${b}-USDT">${b}/USDT</option>`).join("");
+    if(cur&&all.includes(cur.split("-")[0]))$("selInst").value=cur;
+  };
+  fill();
+  loadPrices();setInterval(loadPrices,30000);
+  setInterval(()=>{fill();if($("s-charts").classList.contains("on"))drawChart()},20000);
+}
+$("selInst").onchange=drawChart;$("selBar").onchange=drawChart;
+async function drawChart(){
+  const inst=$("selInst").value,bar=$("selBar").value;
+  if(!inst)return;
+  try{
+    let d;
+    try{
+      const r=await fetch(`${OKX}/market/candles?instId=${inst}&bar=${bar}&limit=200`);
+      const j=await r.json();
+      if(j.code!=="0")throw 0;
+      d={candles:j.data.map(c=>({t:+c[0],o:+c[1],h:+c[2],l:+c[3],c:+c[4],v:+c[5]})).reverse()};
+    }catch(e){d=await api(`/api/klines?inst=${inst}&bar=${bar}`)}
+    if(!d||!d.candles||!d.candles.length)return;
+    candles=d.candles;
+    $("chartUpd").textContent="به‌روز: "+new Date().toLocaleTimeString("fa-IR");
+    parseSigLevels(inst);renderChart();chartReadout();sigForInst(inst);
+  }catch(e){}
+}
+function parseSigLevels(inst){
+  sigLevels=[];
+  const base=inst.split("-")[0];
+  for(const x of (state&&state.signals||[])){
+    const t=(x.text||"").replace(/,/g,"");
+    if(!t.toUpperCase().includes(base))continue;
+    const num=re=>{const m=t.match(re);return m?+m[1]:null};
+    const entry=num(/ورود[^0-9]*([0-9]+\.?[0-9]*)/)||num(/entry[:\s]*([0-9.]+)/i);
+    const sl=num(/حد ضرر[^0-9]*([0-9]+\.?[0-9]*)/)||num(/sl[:\s]*([0-9.]+)/i);
+    const tps=[...t.matchAll(/(?:هدف|tp)\s*[12]?[^0-9]*([0-9]+\.?[0-9]*)/gi)].map(m=>+m[1]);
+    sigLevels.push({entry,sl,tps,raw:t.slice(0,200)});
+  }
+  $("sigOnChart").textContent=sigLevels.length?`— سیگنال روی چارت: ${sigLevels.length}`:"";
+}
+function renderChart(){
+  const cv=$("chartCv"),box=$("chartBox");
+  const W=box.clientWidth,H=box.clientHeight;
+  if(!W||!H)return;
+  cv.width=W*devicePixelRatio;cv.height=H*devicePixelRatio;
+  const g=cv.getContext("2d");g.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+  g.clearRect(0,0,W,H);
+  if(!candles.length)return;
+  const padR=64,padT=10,padB=24,volH=50;
+  const plotW=W-padR-8,plotH=H-padT-padB-volH;
+  let lo=Infinity,hi=-Infinity;
+  for(const c of candles){lo=Math.min(lo,c.l);hi=Math.max(hi,c.h)}
+  for(const s of sigLevels)for(const v of [s.entry,s.sl,...(s.tps||[])])if(v){lo=Math.min(lo,v);hi=Math.max(hi,v)}
+  const pad=(hi-lo)*0.05||1;lo-=pad;hi+=pad;
+  const y=p=>padT+plotH-((p-lo)/(hi-lo))*plotH;
+  const n=candles.length,cw=plotW/n;
+  const x=i=>8+i*cw+cw/2;
+  g.strokeStyle="rgba(177,195,236,.08)";g.fillStyle="#68758d";g.font="9px Vazirmatn,monospace";g.textAlign="left";g.lineWidth=1;
+  for(let i=0;i<=4;i++){const v=lo+(hi-lo)*i/4,yy=y(v);
+    g.beginPath();g.moveTo(8,yy);g.lineTo(8+plotW,yy);g.stroke();
+    g.fillText(v>=1000?v.toLocaleString("en-US",{maximumFractionDigits:0}):v.toFixed(v<1?5:2),W-padR+6,yy+3);}
+  const vmax=Math.max(...candles.map(c=>c.v))||1;
+  candles.forEach((c,i)=>{g.fillStyle=c.c>=c.o?"rgba(99,226,163,.22)":"rgba(255,123,148,.22)";
+    const vh=(c.v/vmax)*volH;g.fillRect(x(i)-cw*0.32,H-padB-vh,cw*0.64,vh)});
+  candles.forEach((c,i)=>{
+    g.strokeStyle=g.fillStyle=c.c>=c.o?"#63e2a3":"#ff7b94";
+    g.beginPath();g.moveTo(x(i),y(c.h));g.lineTo(x(i),y(c.l));g.stroke();
+    const bw=Math.max(1.5,cw*0.6),yo=y(c.o),yc=y(c.c);
+    g.fillRect(x(i)-bw/2,Math.min(yo,yc),bw,Math.max(1.2,Math.abs(yc-yo)));
+  });
+  const emaLine=(len,col)=>{let k=2/(len+1),e=candles[0].c;
+    g.strokeStyle=col;g.lineWidth=1.4;g.beginPath();
+    candles.forEach((c,i)=>{e=c.c*k+e*(1-k);i?g.lineTo(x(i),y(e)):g.moveTo(x(i),y(e))});g.stroke();g.lineWidth=1};
+  emaLine(20,"rgba(115,148,255,.85)");emaLine(50,"rgba(187,145,255,.8)");
+  const line=(v,col,dash,label)=>{if(v==null||v<lo||v>hi)return;
+    g.strokeStyle=col;g.setLineDash(dash);g.beginPath();g.moveTo(8,y(v));g.lineTo(8+plotW,y(v));g.stroke();g.setLineDash([]);
+    g.fillStyle=col;g.fillText(label,W-padR+2,y(v)-3)};
+  for(const s of sigLevels){
+    line(s.entry,"#f4c873",[5,3],"ENTRY");
+    line(s.sl,"#ff7b94",[5,3],"SL");
+    (s.tps||[]).forEach((v,i)=>line(v,"#63e2a3",[5,3],"TP"+(i+1)));
+  }
+  const last=candles[n-1].c;
+  g.strokeStyle="rgba(88,225,209,.7)";g.setLineDash([2,3]);
+  g.beginPath();g.moveTo(8,y(last));g.lineTo(8+plotW,y(last));g.stroke();g.setLineDash([]);
+  cv.onmousemove=ev=>{
+    const r=cv.getBoundingClientRect(),mx=ev.clientX-r.left,my=ev.clientY-r.top;
+    const i=Math.min(n-1,Math.max(0,Math.floor((mx-8)/cw)));
+    const c=candles[i],tip=$("ctip");
+    tip.style.display="block";
+    tip.style.left=Math.min(mx+14,W-170)+"px";tip.style.top=(my+10)+"px";
+    tip.innerHTML=`${new Date(c.t).toLocaleString("en-GB",{hour:"2-digit",minute:"2-digit",day:"2-digit",month:"2-digit"})}<br>O ${c.o} · H ${c.h}<br>L ${c.l} · C <b style="color:${c.c>=c.o?'#63e2a3':'#ff7b94'}">${c.c}</b>`;
+  };
+  cv.onmouseleave=()=>$("ctip").style.display="none";
+}
+function chartReadout(){
+  if(candles.length<60){$("chartRead").innerHTML='<div class="empty">داده کافی نیست</div>';return}
+  const emaV=len=>{let k=2/(len+1),e=candles[0].c;for(const c of candles)e=c.c*k+e*(1-k);return e};
+  const e20=emaV(20),e50=emaV(50),c1=candles[candles.length-1];
+  const body=c1.c-c1.o,rng=(c1.h-c1.l)||1,upW=c1.h-Math.max(c1.o,c1.c),dnW=Math.min(c1.o,c1.c)-c1.l;
+  const avg=candles.slice(-20).reduce((a,c)=>a+c.v,0)/20;
+  const rows=[
+    ["روند کوتاه‌مدت",c1.c>e20&&e20>e50?"🟢 صعودی":c1.c<e20&&e20<e50?"🔴 نزولی":"🟡 خنثی/رنج"],
+    ["آخرین کندل",body>0?`🟢 سبز (بدنه ${(Math.abs(body)/rng*100).toFixed(0)}%)`:body<0?`🔴 قرمز (بدنه ${(Math.abs(body)/rng*100).toFixed(0)}%)`:"⚪ دوجی"],
+    ["فشار سایه",upW>dnW*2?"🔴 فروش در سقف":dnW>upW*2?"🟢 خرید در کف":"⚖️ متعادل"],
+    ["EMA20 / EMA50",`<b dir="ltr">${e20<1?e20.toFixed(5):e20.toFixed(1)} / ${e50<1?e50.toFixed(5):e50.toFixed(1)}</b>`],
+    ["حجم",c1.v>avg*1.5?`🔥 اسپایک ${(c1.v/avg).toFixed(1)}x`:c1.v<avg*0.5?"💤 کم‌حجم":"▶️ نرمال"],
+  ];
+  $("chartRead").innerHTML=rows.map(([k,v])=>`<div class="kv"><span>${k}</span><b style="direction:rtl">${v}</b></div>`).join("");
+}
+function sigForInst(inst){
+  const base=inst.split("-")[0];
+  const list=(state&&state.signals||[]).filter(x=>(x.text||"").toUpperCase().includes(base));
+  $("sigForInst").innerHTML=(list||[]).length?list.slice().reverse().map(x=>
+    `<div class="sig"><div class="sig-text">${String(x.text).replace(/\*\*/g,"").slice(0,300)}</div></div>`).join("")
+    :'<div class="empty">برای این نماد سیگنالی ثبت نشده</div>';
+}
+refresh();setInterval(refresh,30000);
 </script>
 </body>
 </html>
