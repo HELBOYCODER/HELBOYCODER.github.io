@@ -261,6 +261,25 @@ h1.page{font-size:19px;margin:2px 0 4px}
           <p class="card-sub" style="margin-top:10px">در ربات: <code>/start</code> ← یوزرنیم ← پسورد ← دکمه «عضویت شکار خودکار»</p>
         </div>
       </div>
+      <div class="glass card" style="margin-top:13px">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+          <div><div class="card-title">🔔 آلارم قیمت</div><div class="card-sub">هر چرخه شکار چک می‌شود؛ هشدار به تلگرام + همین فید</div></div>
+        </div>
+        <div class="form-row" style="margin-top:10px">
+          <input id="alSym" placeholder="BTC" style="max-width:110px;text-transform:uppercase">
+          <select id="alOp" style="max-width:120px"><option value="above">بالاتر از</option><option value="below">پایین‌تر از</option></select>
+          <input id="alTg" placeholder="قیمت هدف" type="number" step="any">
+          <button class="btn primary sm" id="btnAl">ثبت</button>
+        </div>
+        <div id="alList" style="margin-top:8px"></div>
+      </div>
+      <div class="glass card" style="margin-top:13px">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+          <div><div class="card-title">📈 وین‌ریت سیگنال‌ها</div><div class="card-sub">از آرشیو دائمی D1</div></div>
+          <button class="btn sm" id="btnStats">🔄</button>
+        </div>
+        <div id="statsBox" style="margin-top:10px"><div class="empty">برای محاسبه دکمه را بزن</div></div>
+      </div>
     </section>
 
     <section class="sec" id="s-users">
@@ -647,6 +666,43 @@ function sigForInst(inst){
     :'<div class="empty">برای این نماد سیگنالی ثبت نشده</div>';
 }
 refresh();setInterval(refresh,30000);
+
+/* ---- price alerts + win-rate ---- */
+async function loadAlerts(){
+  if(!session&&!adminSess){$("alList").innerHTML='<div class="empty">برای مدیریت آلارم وارد شو</div>';return}
+  try{
+    const d=await api("/api/alerts",{headers:ah()});
+    const l=(d.alerts||[]);
+    $("alList").innerHTML=l.length?l.map(a=>
+      `<div class="kv"><span><b dir="ltr">${a.symbol}</b> ${a.op==="above"?"بالاتر از":"پایین‌تر از"} <b dir="ltr">${a.target}</b></span><b>${a.active?"⏳ فعال":"✅ ثبت"}</b> <button class="btn danger sm" onclick="delAlert(${a.id})" style="padding:2px 8px">✕</button></div>`).join("")
+      :'<div class="empty">آلارمی ثبت نشده</div>';
+  }catch(e){$("alList").innerHTML='<div class="empty">خطا در دریافت آلارم‌ها</div>'}
+}
+async function delAlert(id){await api("/api/alerts?id="+id,{method:"DELETE",headers:ah()});toast("حذف شد");loadAlerts()}
+$("btnAl").onclick=async()=>{
+  const s=$("alSym").value.trim().toUpperCase(),t=parseFloat($("alTg").value);
+  if(!s||!t){toast("نماد و قیمت هدف را بده");return}
+  const d=await api("/api/alerts",{method:"POST",headers:ah(),body:JSON.stringify({symbol:s,op:$("alOp").value,target:t})});
+  if(d.error){toast(d.error);return}
+  toast("آلارم ثبت شد ✅");$("alTg").value="";loadAlerts();
+};
+async function loadStats(){
+  $("statsBox").innerHTML='<div class="empty">در حال محاسبه…</div>';
+  try{
+    const d=await api("/api/stats");
+    const r=d.by_side||[];
+    if(!d.total){$("statsBox").innerHTML='<div class="empty">هنوز سیگنالی در آرشیو نیست</div>';return}
+    let h=`<div class="kv"><span>کل سیگنال‌های آرشیو</span><b>${fa(d.total)}</b></div>`;
+    for(const s of r){
+      const done=(s.tp||0)+(s.sl||0),wr=done?Math.round((s.tp||0)/done*100):0;
+      h+=`<div class="kv"><span>${s.side==="LONG"?"🟢 لانگ":s.side==="SHORT"?"🔴 شورت":s.side}</span><b style="direction:rtl">${s.tp||0} برد / ${s.sl||0} باخت — وین‌ریت <b style="color:${wr>=50?"#63e2a3":"#ff7b94"}">${wr}%</b></b></div>`;
+    }
+    $("statsBox").innerHTML=h;
+  }catch(e){$("statsBox").innerHTML='<div class="empty">خطا در آمار</div>'}
+}
+$("btnStats").onclick=loadStats;
+window.delAlert=delAlert;
+loadAlerts();
 </script>
 </body>
 </html>
