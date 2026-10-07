@@ -502,7 +502,7 @@ function render(s){
   $("upd1").textContent=s.updated?("سینک: "+dstr(s.updated)):"در انتظار اولین سینک…";
   $("svcTxt").textContent=on?"ربات فعال است":"ربات خاموش است";
   $("svcSub").textContent=s.updated?("آخرین سینک: "+dstr(s.updated)):"آخرین سینک: —";
-  $("botSt").innerHTML=on?'🟢 روشن':'🔴 خاموش';$("botUpd").textContent=dstr(s.updated);
+  $("botSt")&&($("botSt").innerHTML=on?'🟢 روشن':'🔴 خاموش');$("botUpd")&&($("botUpd").textContent=dstr(s.updated));
   $("accU").textContent=me.username||"—";
   const u=(s.users||{})[me.username];
   $("accExp").textContent=me.admin?"∞ (ادمین)":(u&&u.expires_at?dstr(u.expires_at*1000):"∞");
@@ -526,14 +526,14 @@ function render(s){
   $("newsAll").innerHTML=nl||'<div class="empty">خبری نیست</div>';
   const users=s.users||{};const now=Date.now()/1000;let act=0,exp=0;
   for(const v of Object.values(users)){if(v.expires_at&&now>v.expires_at)exp++;else act++}
-  $("userList").innerHTML=Object.entries(users).map(([n,v])=>{
+  if($("userList"))$("userList").innerHTML=Object.entries(users).map(([n,v])=>{
     const x=v.expires_at&&now>v.expires_at;
     return `<div class="user-row"><b>${n}</b>
       <span class="st ${x?'off':'on'}">${x?'● منقضی':'● فعال'} · تا ${v.expires_at?dstr(v.expires_at*1000):'∞'}</span>
       <span class="updated">${dstr((v.created_at||0)*1000)}</span>
       <button class="mini del" data-del="${n}">🗑 حذف</button></div>`;
   }).join("")||'<div class="empty">اکانتی نیست</div>';
-  $("userList").querySelectorAll("[data-del]").forEach(b=>b.onclick=async()=>{
+  $("userList")&&$("userList").querySelectorAll("[data-del]").forEach(b=>b.onclick=async()=>{
     if(!confirm("«"+b.dataset.del+"» حذف شود؟"))return;
     const r=await api("/api/admin/deluser",{method:"POST",headers:ah(),body:JSON.stringify({username:b.dataset.del})});
     toast(r.ok?"در صف حذف — ربات اعمال می‌کند":"خطا");setTimeout(refresh,800);
@@ -542,14 +542,14 @@ function render(s){
 window.goChart=inst=>{document.querySelector('[data-s="charts"]').click();$("selInst").value=inst+"-USDT";drawChart()};
 
 /* ---------- admin actions ---------- */
-$("btnGen2").onclick=genUser;
-$("btnAddU").onclick=()=>{$("addForm").style.display=$("addForm").style.display==="none"?"flex":"none"};
+if($("btnGen2"))$("btnGen2").onclick=genUser;
+if($("btnAddU"))$("btnAddU").onclick=()=>{$("addForm").style.display=$("addForm").style.display==="none"?"flex":"none"};
 $("btnNoAdd").onclick=()=>$("addForm").style.display="none";
 $("btnDoAdd").onclick=async()=>{
-  const u=$("nuU").value.trim(),p=$("nuP").value,d=parseInt($("nuD").value||"0");
+  const u=$("nuU")&&$("nuU").value.trim(),p=$("nuP")&&$("nuP").value,d=parseInt($("nuD").value||"0");
   if(!u||!p){toast("یوزرنیم و رمز لازم است");return}
   const r=await api("/api/admin/adduser",{method:"POST",headers:ah(),body:JSON.stringify({username:u,password:p,days:d})});
-  if(r.ok){toast("در صف ساخت — ربات می‌سازد");$("nuU").value="";$("nuP").value="";$("nuD").value="";$("addForm").style.display="none";setTimeout(refresh,800)}
+  if(r.ok){toast("در صف ساخت — ربات می‌سازد");if($("nuU"))$("nuU").value="";if($("nuP"))$("nuP").value="";$("nuD").value="";$("addForm").style.display="none";setTimeout(refresh,800)}
   else toast(r.error||"خطا");
 };
 $("btnBotOn").onclick=async()=>{const r=await api("/api/admin/bot",{method:"POST",headers:ah(),body:JSON.stringify({enabled:true})});toast(r.ok?"روشن شد (اعمال در چرخه بعد)":"خطا");setTimeout(refresh,800)};
@@ -561,7 +561,7 @@ $("btnDbg").onclick=async()=>{
   const r=await api("/api/login",{method:"POST",body:JSON.stringify({username:$("dbgU").value.trim(),password:$("dbgP").value})});
   $("dbgOut").textContent=JSON.stringify({ok:r.ok,error:r.error||null,ms:Date.now()-t0,expires_at:r.expires_at||null},null,2);
 };
-$("btnRaw").onclick=()=>{$("rawOut").textContent=JSON.stringify(state,null,2).slice(0,6000)};
+if($("btnRaw"))$("btnRaw").onclick=()=>{if($("rawOut"))$("rawOut").textContent=JSON.stringify(state,null,2).slice(0,6000)};
 $("btnHealth").onclick=runHealth;
 async function runHealth(){
   const items=[];
