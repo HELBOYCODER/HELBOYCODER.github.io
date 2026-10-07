@@ -416,10 +416,14 @@ function genUser(){
     var _l=document.getElementById("s-landing");if(_l)_l.style.display="none";
     ["dash","news","charts","signals"].forEach(k=>{var n=document.querySelector('[data-s="'+k+'"]');if(n)n.style.display="none";
       var sec=document.getElementById("s-"+k);if(sec)sec.style.display="none";});
+    var tu=document.getElementById("tabU");if(tu)tu.remove();
     document.title="Sniper Admin";
   }else{
     ["users","bot","system"].forEach(k=>{var n=document.querySelector('[data-s="'+k+'"]');if(n)n.style.display="none";
-      var sec=document.getElementById("s-"+k);if(sec)sec.style.display="none";});
+      var sec=document.getElementById("s-"+k);if(sec)sec.remove();});
+    var an=document.getElementById("adminNav");if(an)an.remove();
+    var ta=document.getElementById("tabA");if(ta)ta.remove();
+    document.title="Sniper Pro | پلتفرم شکار سیگنال";
   }
 const API="https://sniper-web.quilt-refract.workers.dev";
 const OKX="https://www.okx.com/api/v5";
