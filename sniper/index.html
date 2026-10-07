@@ -159,7 +159,25 @@ h1.page{font-size:19px;margin:2px 0 4px}
   </div>
 </div>
 
-<div class="shell" id="shell">
+
+<section class="sec" id="s-landing" style="display:block">
+  <div class="glass card" style="max-width:560px;margin:0 auto">
+    <h1 style="font-size:26px;margin:8px 0">🏹 Sniper Pro</h1>
+    <p style="color:var(--muted);line-height:2;font-size:13px">
+      پلتفرم شکار سیگنال کریپتو با موتور تحلیل چند-تایم‌فریمی: TA + پرایس‌اکشن + اخبار/سنتیمنت + مشتقات،
+      سطوح حساس اثبات‌شده با S/R واقعی، چارت حرفه‌ای با RSI/MACD، ردیابی خودکار TP/SL و وین‌ریت شفاف.
+    </p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:14px 0">
+      <span class="pill buy">وین‌ریت زنده</span>
+      <span class="pill gold">چارت زنده TradingView</span>
+      <span class="pill sell">ریسک‌منیج</span>
+    </div>
+    <button class="btn" style="width:100%;padding:12px" onclick="showLogin()">ورود / ثبت ورود</button>
+    <div style="margin-top:10px;font-size:11px;color:var(--muted)">ادمین هستید؟ <a href="https://admin.ersbot.us.ci" style="color:var(--gold)">پنل ادمین ↗</a></div>
+  </div>
+</section>
+
+    <div class="shell" id="shell">
   <aside class="side"><div class="glass side-card">
     <div class="mini-status"><span class="pulse"></span><span id="svcTxt">ربات فعال است</span></div>
     <div class="side-foot" id="svcSub">آخرین سینک: —</div>
@@ -309,6 +327,8 @@ h1.page{font-size:19px;margin:2px 0 4px}
           <input id="nuD" placeholder="روز (۰=بی‌نهایت)" type="number" min="0" style="max-width:140px">
           <button class="btn primary sm" id="btnDoAdd">تایید</button>
           <button class="btn sm" id="btnNoAdd">انصراف</button>
+          <button class="btn sm" id="btnGen2" type="button">🎲 ساخت خودکار</button>
+          <div id="genOut" style="display:none;width:100%;background:rgba(240,185,11,.08);border:1px solid var(--gold);border-radius:10px;padding:10px;font-size:13px"></div>
         </div>
         <div id="userList" style="margin-top:8px"></div>
       </div>
@@ -376,6 +396,18 @@ h1.page{font-size:19px;margin:2px 0 4px}
 </div>
 <div class="toast" id="toast"></div>
 
+function _rnd(n){const CH="abcdefghjkmnpqrstuvwxyz23456789ABCDEFGHJKMNPQRSTUVWXYZ23456789";return Array.from({length:n},()=>CH[Math.floor(Math.random()*CH.length)]).join("")}
+function genUser(){
+  const u="user_"+_rnd(5).toLowerCase(), p=_rnd(12);
+  const uI=document.getElementById('nuU'), pI=document.getElementById('nuP');
+  if(uI)uI.value=u; if(pI)pI.value=p;
+  const box=document.getElementById('genOut');
+  if(box){box.style.display='block';
+    box.innerHTML=`یوزر: <b>${u}</b> · پسورد: <b>${p}</b> <button class="mini" id="btnCp">📋 کپی</button>`;
+    document.getElementById('btnCp').onclick=()=>{navigator.clipboard.writeText('یوزر: '+u+'\nپسورد: '+p+'\nوب: https://ersbot.us.ci').then(()=>{document.getElementById('btnCp').textContent='✅ کپی شد'})};
+  }
+}
+</script>
 <script>
 const API="https://sniper-web.quilt-refract.workers.dev";
 const OKX="https://www.okx.com/api/v5";
@@ -409,7 +441,18 @@ $("btnLogin").onclick=async()=>{
 $("inP").addEventListener("keydown",e=>{if(e.key==="Enter")$("btnLogin").click()});
 $("inU").addEventListener("keydown",e=>{if(e.key==="Enter")$("inP").focus()});
 function enter(kind){
-  $("v-login").style.display="none";$("shell").classList.add("on");
+  const _isAdminHost=/^admin\./.test(location.hostname);
+  if(_isAdminHost){
+    if($("s-landing"))$("s-landing").style.display="none";
+    ["dash","news","charts","signals"].forEach(k=>{const n=document.querySelector(`[data-s="${k}"]`);if(n)n.style.display="none";
+      const sec=document.getElementById("s-"+k);if(sec)sec.style.display="none";});
+    document.title="Sniper Admin";
+  }else{
+    ["users","bot","system"].forEach(k=>{const n=document.querySelector(`[data-s="${k}"]`);if(n)n.style.display="none";
+      const sec=document.getElementById("s-"+k);if(sec)sec.style.display="none";});
+  }
+  window.genUser=genUser;window.showLogin=()=>{$("s-landing").style.display="none";$("v-login").style.display="block"};
+  if($("s-landing"))$("s-landing").style.display="block";
   $("adminNav").style.display=kind==="admin"?"block":"none";
   $("hello").textContent=kind==="admin"?"سلام، مدیر 👑":"سلام، "+(localStorage.sniper_uname||"تریدر")+" 👋";
   if(kind==="admin")me={username:"__admin__",admin:true};
@@ -488,6 +531,7 @@ function render(s){
 window.goChart=inst=>{document.querySelector('[data-s="charts"]').click();$("selInst").value=inst+"-USDT";drawChart()};
 
 /* ---------- admin actions ---------- */
+$("btnGen2").onclick=genUser;
 $("btnAddU").onclick=()=>{$("addForm").style.display=$("addForm").style.display==="none"?"flex":"none"};
 $("btnNoAdd").onclick=()=>$("addForm").style.display="none";
 $("btnDoAdd").onclick=async()=>{
