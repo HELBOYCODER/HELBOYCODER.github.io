@@ -397,6 +397,7 @@ h1.page{font-size:19px;margin:2px 0 4px}
 </div>
 <div class="toast" id="toast"></div>
 
+<script>
 function _rnd(n){const CH="abcdefghjkmnpqrstuvwxyz23456789ABCDEFGHJKMNPQRSTUVWXYZ23456789";return Array.from({length:n},()=>CH[Math.floor(Math.random()*CH.length)]).join("")}
 function genUser(){
   const u="user_"+_rnd(5).toLowerCase(), p=_rnd(12);
@@ -408,8 +409,7 @@ function genUser(){
     document.getElementById('btnCp').onclick=()=>{navigator.clipboard.writeText('یوزر: '+u+'\nپسورد: '+p+'\nوب: https://ersbot.us.ci').then(()=>{document.getElementById('btnCp').textContent='✅ کپی شد'})};
   }
 }
-</script>
-<script>
+
 /*host-split*/
   const _isAdminHost=/^admin\./.test(location.hostname);
   if(_isAdminHost){
