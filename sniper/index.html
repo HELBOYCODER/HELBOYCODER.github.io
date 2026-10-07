@@ -173,6 +173,7 @@ h1.page{font-size:19px;margin:2px 0 4px}
       <span class="pill sell">ریسک‌منیج</span>
     </div>
     <button class="btn" style="width:100%;padding:12px" onclick="showLogin()">ورود / ثبت ورود</button>
+    <a class="btn" style="width:100%;padding:12px;margin-top:8px;text-align:center;display:block;text-decoration:none;background:linear-gradient(135deg,#229ED9,#1c7fb0);color:#fff" href="https://t.me/TRADESIGNALERSAZbot?start=web_">🚀 ورود مستقیم در تلگرام</a>
     <div style="margin-top:10px;font-size:11px;color:var(--muted)">ادمین هستید؟ <a href="https://admin.ersbot.us.ci" style="color:var(--gold)">پنل ادمین ↗</a></div>
   </div>
 </section>
@@ -499,6 +500,8 @@ function render(s){
   const u=(s.users||{})[me.username];
   $("accExp").textContent=me.admin?"∞ (ادمین)":(u&&u.expires_at?dstr(u.expires_at*1000):"∞");
   $("accBot").innerHTML=on?'🟢 فعال':'🔴 خاموش';
+  const _tg=document.getElementById("tgSwitch");
+  if(_tg)_tg.href="https://t.me/TRADESIGNALERSAZbot?start=web_"+encodeURIComponent(me.username||"");
   const sigHtml=(s.signals||[]).slice().reverse().map(x=>{
     const short=/شورت|SHORT/i.test(x.text),long=/لانگ|LONG/i.test(x.text);
     const nm=(x.text.match(/نماد[:：]\s*\*{0,2}\s*([A-Z0-9]+)/i)||x.text.match(/([A-Z]{2,6})\/USDT/i)||[])[1]||"شکار";
