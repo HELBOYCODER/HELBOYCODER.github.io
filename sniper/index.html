@@ -417,6 +417,7 @@ function genUser(){
     ["dash","news","charts","signals"].forEach(k=>{var n=document.querySelector('[data-s="'+k+'"]');if(n)n.style.display="none";
       var sec=document.getElementById("s-"+k);if(sec)sec.style.display="none";});
     var tu=document.getElementById("tabU");if(tu)tu.remove();
+    window._forceAdminMode=true;
     document.title="Sniper Admin";
   }else{
     ["users","bot","system"].forEach(k=>{var n=document.querySelector('[data-s="'+k+'"]');if(n)n.style.display="none";
@@ -430,15 +431,15 @@ const OKX="https://www.okx.com/api/v5";
 const $=i=>document.getElementById(i);
 const fa=n=>Number(n||0).toLocaleString("fa-IR");
 const dstr=t=>t?new Date(t).toLocaleString("fa-IR",{month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"}):"—";
-let mode="user",session=localStorage.sniper_session||"",adminSess=localStorage.sniper_admin||"",me={};
+let mode=(window._forceAdminMode?"admin":"user"),session=localStorage.sniper_session||"",adminSess=localStorage.sniper_admin||"",me={};
 let state=null,prices={},candles=[],sigLevels=[];
 const toast=t=>{const e=$("toast");e.textContent=t;e.classList.add("show");setTimeout(()=>e.classList.remove("show"),2600)};
 async function api(p,opt={}){const r=await fetch(API+p,{...opt,headers:{"content-type":"application/json",...(opt.headers||{})}});return r.json()}
 const ah=()=>({authorization:"Bearer "+(adminSess||session)});
 
 /* ---------- login ---------- */
-$("tabU").onclick=()=>{mode="user";$("tabU").classList.add("active");$("tabA").classList.remove("active");$("fU").style.display="block";$("lblP").textContent="رمز عبور"};
-$("tabA").onclick=()=>{mode="admin";$("tabA").classList.add("active");$("tabU").classList.remove("active");$("fU").style.display="none";$("lblP").textContent="کد ادمین"};
+if($("tabU"))$("tabU").onclick=()=>{mode="user";$("tabA")&&$("tabA").classList.remove("active");$("fU").style.display="block";$("lblP").textContent="رمز عبور"};
+if($("tabA"))$("tabA").onclick=()=>{mode="admin";$("tabU")&&$("tabU").classList.remove("active");$("fU").style.display="none";$("lblP").textContent="کد ادمین"};
 $("btnLogin").onclick=async()=>{
   $("lerr").textContent="";
   try{
