@@ -106,6 +106,33 @@ h1.page{font-size:19px;margin:2px 0 4px}
 .kv:last-child{border-bottom:0}
 .kv b{text-align:left;direction:ltr}
 @media(max-width:1000px){.shell.on{grid-template-columns:1fr}.side{position:static}.stats{grid-template-columns:repeat(2,1fr)}.two,.two-eq{grid-template-columns:1fr}.app{padding:14px 12px 40px}#chartBox{height:320px}}
+@media(max-width:640px){
+ .app{padding:10px 9px 60px}
+ .brand-name{font-size:14px}.brand-mark{width:34px;height:34px}
+ .clock{display:none}
+ .side-card{position:sticky;top:0;z-index:9;background:rgba(10,15,27,.96);backdrop-filter:blur(14px)}
+ /* sidebar becomes horizontal swipeable bar */
+ .side-card{display:flex;flex-wrap:nowrap;overflow-x:auto;gap:4px;scrollbar-width:none;padding:8px}
+ .side-card::-webkit-scrollbar{display:none}
+ .side-label,.side-foot,.sep{display:none}
+ .mini-status{flex:none;padding:8px 10px;font-size:10px;white-space:nowrap}
+ .slink{flex:none;width:auto;padding:8px 11px;font-size:11px;white-space:nowrap;box-shadow:inset -2px 0 transparent}
+ .slink.active{box-shadow:inset 0 -2px var(--cyan)}
+ .slink .cnt{margin-right:4px}
+ .btn.danger.sm{flex:none}
+ .stats{grid-template-columns:repeat(2,1fr);gap:9px}
+ .stat{min-height:84px;padding:11px 12px}.stat-num{font-size:18px}
+ h1.page{font-size:16px}.crumb{font-size:9px}
+ #chartBox{height:270px}
+ .chart-tools{gap:6px}.chart-tools select{padding:6px 8px;font-size:10px;max-width:110px}
+ #pxNow{font-size:13px}
+ .user-row{grid-template-columns:1fr auto;row-gap:4px}
+ .user-row .updated{display:none}
+ .form-row input{min-width:90px}
+ .sig-text{font-size:10px}
+ .news-item{font-size:10px}
+ .toast{left:10px;right:10px;bottom:14px;text-align:center}
+}
 </style>
 </head>
 <body>
@@ -450,8 +477,8 @@ async function runHealth(){
   const items=[];
   const probe=async(n,p)=>{const t0=Date.now();try{await api(p);items.push([n,"✅ "+(Date.now()-t0)+"ms"])}catch(e){items.push([n,"❌ "+e.message])}};
   await probe("Worker API","/api/state");
-  await probe("OKX candles","/api/klines?inst=BTC-USDT&bar=5m");
-  await probe("OKX prices","/api/prices");
+  await probe("OKX candles (مرورگر)","/api/klines?inst=BTC-USDT&bar=5m");
+  await probe("CoinGecko prices (مرورگر)","/api/prices");
   items.push(["Snapshot age",state&&state.updated?Math.round((Date.now()-state.updated)/60000)+" دقیقه پیش":"—"]);
   items.push(["قیمت زنده (مرورگر→OKX)",(await fetch(`${OKX}/market/tickers?instId=BTC-USDT`).then(r=>r.ok)).toString()]);
   $("healthList").innerHTML=items.map(([k,v])=>`<div class="kv"><span>${k}</span><b>${v}</b></div>`).join("");
@@ -462,14 +489,16 @@ async function loadPrices(){
   try{
     let d={};
     try{
-      const r=await fetch(`${OKX}/market/tickers?instType=SPOT`);
-      const j=await r.json();
-      const want=["BTC","ETH","SOL","BNB","XRP","DOGE","AVAX","LINK","TON","ADA","PEPE","WIF"];
-      for(const t of (j.data||[])) if(t.instId.endsWith("-USDT")){
-        const b=t.instId.split("-")[0];
-        if(want.includes(b)) d[b]={last:+t.last,chg:+(t.open24h?((+t.last-+t.open24h)/+t.open24h*100).toFixed(2):0)};
-      }
-    }catch(e){ d=await api("/api/prices"); }
+      // CoinGecko free API (CORS-open, no key) — primary price source
+      const ids={BTC:"bitcoin",ETH:"ethereum",SOL:"solana",BNB:"binancecoin",XRP:"ripple",DOGE:"dogecoin",AVAX:"avalanche-2",LINK:"chainlink",TON:"the-open-network",ADA:"cardano",PEPE:"pepe",WIF:"dogwifcoin"};
+      const q=Object.values(ids).join(",");
+      const j=await (await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${q}&vs_currencies=usd&include_24hr_change=true`)).json();
+      for(const [b,id] of Object.entries(ids))
+        if(j[id]) d[b]={last:j[id].usd,chg:+(j[id].usd_24h_change||0).toFixed(2)};
+      if(!Object.keys(d).length) throw 0;
+    }catch(e){
+      try{ d=await api("/api/prices"); }catch(e2){ d={}; }
+    }
     prices=d;
     const order=["BTC","ETH","SOL","BNB","XRP","DOGE","AVAX","LINK","TON","ADA","PEPE","WIF"];
     $("pstrip").innerHTML=order.filter(b=>prices[b]).map(b=>{
