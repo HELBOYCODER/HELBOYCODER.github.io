@@ -505,7 +505,7 @@ function render(s){
   const sigHtml=(s.signals||[]).slice().reverse().map(x=>{
     const short=/شورت|SHORT/i.test(x.text),long=/لانگ|LONG/i.test(x.text);
     const nm=(x.text.match(/نماد[:：]\s*\*{0,2}\s*([A-Z0-9]+)/i)||x.text.match(/([A-Z]{2,6})\/USDT/i)||[])[1]||"شکار";
-    const ch = (x.chart||x.ts) ? `<img class="sig-chart" loading="lazy" src="https://sniper-web.quilt-refract.workers.dev/api/chart/${x.ts}" alt="chart" onclick="zoomImg(this.src)" onerror="this.style.display='none'">` : "";
+    const ch = (x.chart||x.ts) ? `<img class="sig-chart" loading="lazy" src="https://sniper-web.quilt-refract.workers.dev/api/chart/${x.chart||x.ts}" alt="chart" onclick="zoomImg(this.src)" onerror="this.style.display='none'">` : "";
     return `<div class="sig"><div class="sig-head">
       <span class="pair" onclick="goChart('${nm}')">${nm}/USDT ↗</span>
       <span class="pill ${short?'sell':long?'buy':'gold'}">${short?'SHORT ▼':long?'LONG ▲':'—'}</span></div>
