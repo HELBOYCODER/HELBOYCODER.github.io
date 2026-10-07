@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#090d18">
+<title>Sniper | داشبورد سیگنال</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080c16;--panel:rgba(19,25,41,.68);--line:rgba(177,195,236,.105);--muted:#8e9bb4;--text:#edf2ff;--cyan:#58e1d1;--blue:#7394ff;--purple:#bb91ff;--green:#63e2a3;--red:#ff7b94;--gold:#f4c873;--r:20px;--shadow:0 22px 70px rgba(0,0,0,.34)}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;color:var(--text);background:radial-gradient(ellipse at 80% -10%,rgba(108,106,255,.17),transparent 34%),radial-gradient(ellipse at 3% 45%,rgba(27,196,193,.08),transparent 28%),var(--bg);font-family:Vazirmatn,Tahoma,Arial,sans-serif;font-size:14px;line-height:1.7}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.2;background-image:radial-gradient(rgba(209,221,255,.5) .65px,transparent .65px);background-size:25px 25px;mask-image:linear-gradient(to bottom,black,transparent 78%)}
+button,input{font:inherit;color:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+.app{position:relative;max-width:1240px;margin:auto;padding:26px 28px 42px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 2px 20px;border-bottom:1px solid rgba(255,255,255,.07)}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-mark{width:42px;height:42px;display:grid;place-items:center;border-radius:14px;background:linear-gradient(145deg,rgba(89,224,209,.24),rgba(111,131,255,.23));border:1px solid rgba(130,224,227,.28);font-size:20px}
+.brand-name{font-size:17px;font-weight:800}.brand-name span{color:var(--cyan)}.brand-sub{font-size:10px;color:var(--muted);margin-top:-3px}
+.top-actions{display:flex;gap:10px;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:11px;border:1px solid var(--line);background:rgba(255,255,255,.035);color:#dfe7f7;font-size:12px;transition:.22s}
+.btn:hover{transform:translateY(-2px);border-color:rgba(88,225,209,.3)}
+.btn.primary{background:linear-gradient(100deg,#52d9cb,#7693ff);color:#07131b;border:0;font-weight:700}
+.glass{border:1px solid var(--line);border-radius:var(--r);background:linear-gradient(145deg,rgba(24,31,50,.75),rgba(13,18,31,.72));backdrop-filter:blur(20px);box-shadow:0 15px 45px rgba(0,0,0,.18)}
+.login-wrap{min-height:70vh;display:grid;place-items:center}
+.login-card{width:min(420px,92vw);padding:34px 30px;text-align:center}
+.login-card h2{margin:14px 0 4px;font-size:20px}.login-card p{color:var(--muted);font-size:11px;margin:0 0 22px}
+.field{margin-bottom:12px;text-align:right}
+.field label{display:block;font-size:10px;color:var(--muted);margin-bottom:5px}
+.field input{width:100%;padding:11px 13px;border-radius:12px;border:1px solid var(--line);background:rgba(6,11,21,.4);font-size:13px}
+.field input:focus{border-color:rgba(88,225,209,.4);outline:none}
+.tabs{display:flex;gap:8px;padding:5px;border:1px solid var(--line);border-radius:14px;background:rgba(18,24,38,.65);margin-bottom:22px}
+.tab{flex:1;border:0;background:transparent;color:var(--muted);padding:9px;border-radius:10px;font-size:12px;transition:.25s}
+.tab.active{color:#eafcff;background:rgba(81,219,202,.13);box-shadow:inset 0 0 0 1px rgba(81,219,202,.17)}
+.err{color:var(--red);font-size:11px;min-height:18px;margin-bottom:8px}
+.view{display:none}.view.on{display:block;animation:appear .4s ease both}
+@keyframes appear{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.grid{display:grid;gap:14px}
+.stats{grid-template-columns:repeat(4,minmax(0,1fr));margin:18px 0}
+.stat{padding:16px;min-height:108px}.stat-top{display:flex;justify-content:space-between;color:#99a7bf;font-size:10px;align-items:center}
+.stat-number{font-size:23px;font-weight:700;margin-top:10px}.stat-number small{font-size:11px;color:#a8b3c9;font-weight:500}
+.stat-change{font-size:9px;color:var(--green);margin-top:6px}
+.two{grid-template-columns:minmax(0,1.5fr) minmax(260px,1fr)}
+.card{padding:18px}
+.card-title{font-size:13px;font-weight:700}.card-sub{font-size:10px;color:var(--muted);margin-top:2px}
+.sig{border:1px solid rgba(255,255,255,.055);border-radius:12px;padding:12px 14px;margin-bottom:10px;background:rgba(6,11,21,.25)}
+.sig-head{display:flex;justify-content:space-between;align-items:center}
+.pair{font-weight:700;direction:ltr}
+.pill{font-size:9px;border-radius:7px;padding:3px 8px}
+.buy{background:rgba(99,226,163,.1);color:var(--green)}.sell{background:rgba(255,123,148,.1);color:var(--red)}
+.pill.gold{background:rgba(244,200,115,.1);color:var(--gold)}
+.sig-text{font-size:11px;color:#c3cede;margin-top:8px;white-space:pre-wrap;word-break:break-word}
+.pulse{width:7px;height:7px;border-radius:50%;background:var(--green);display:inline-block;box-shadow:0 0 0 4px rgba(99,226,163,.09);animation:pp 2s infinite}
+@keyframes pp{0%,100%{box-shadow:0 0 0 4px rgba(99,226,163,.09)}50%{box-shadow:0 0 0 7px rgba(99,226,163,0)}}
+.news-item{display:flex;gap:8px;font-size:11px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.045)}
+.news-item:last-child{border-bottom:0}
+.user-row{display:grid;grid-template-columns:1fr auto auto auto;gap:10px;align-items:center;padding:10px 2px;border-bottom:1px solid rgba(255,255,255,.05);font-size:12px}
+.user-row:last-child{border-bottom:0}
+.user-state{font-size:9px}.st-active{color:var(--green)}.st-expired{color:var(--red)}
+.mini-btn{border:1px solid var(--line);background:transparent;border-radius:8px;padding:4px 10px;font-size:10px;color:#c9d4e6}
+.mini-btn.del{color:var(--red);border-color:rgba(255,123,148,.25)}
+.form-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.form-row input{flex:1;min-width:110px;padding:9px 11px;border-radius:10px;border:1px solid var(--line);background:rgba(6,11,21,.4);font-size:12px}
+.toast{position:fixed;left:24px;bottom:24px;padding:12px 16px;border:1px solid rgba(88,225,209,.2);border-radius:13px;background:rgba(17,26,42,.94);font-size:12px;opacity:0;transform:translateY(12px);transition:.3s;pointer-events:none;z-index:9}
+.toast.show{opacity:1;transform:none}
+.clock{font-size:11px;color:var(--muted)}
+.updated{font-size:9px;color:#68758c}
+.empty{color:#68758c;font-size:11px;padding:16px 0;text-align:center}
+@media(max-width:900px){.stats{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}.app{padding:16px 14px 40px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="topbar">
+  <div class="brand"><div class="brand-mark">🏹</div><div><div class="brand-name">Sniper<span>.</span></div><div class="brand-sub">داشبورد سیگنال هوشمند</div></div></div>
+  <div class="top-actions">
+    <span class="clock" id="clock"></span>
+    <button class="btn" id="logoutBtn" style="display:none">خروج</button>
+  </div>
+</header>
+
+<div class="view on login-wrap" id="v-login">
+  <div class="glass login-card">
+    <div style="font-size:34px">🏹</div>
+    <h2>ورود به داشبورد</h2>
+    <p>با اکانت ربات تلگرام وارد شو یا به‌عنوان مدیر</p>
+    <div class="tabs">
+      <button class="tab active" id="tabUser">👤 کاربر</button>
+      <button class="tab" id="tabAdmin">👑 ادمین</button>
+    </div>
+    <div class="err" id="loginErr"></div>
+    <div class="field" id="fUser"><label>نام کاربری</label><input id="inUser" autocomplete="username"></div>
+    <div class="field" id="fPass"><label id="lblPass">رمز عبور</label><input id="inPass" type="password" autocomplete="current-password"></div>
+    <button class="btn primary" style="width:100%;justify-content:center" id="btnLogin">ورود</button>
+  </div>
+</div>
+
+<div class="view" id="v-user">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-top:18px;flex-wrap:wrap;gap:10px">
+    <div><div style="font-size:10px;color:var(--cyan)"><span class="pulse"></span> بازار زنده / نمای کاربر</div>
+    <h1 style="margin:4px 0 0;font-size:21px">سلام، <span id="uname"></span> ✦</h1></div>
+    <button class="btn primary" id="btnNow">🎯 تحلیل لحظه‌ای</button>
+  </div>
+  <div class="grid stats">
+    <div class="glass stat"><div class="stat-top">وضعیت ربات <span>🤖</span></div><div class="stat-number" id="stBot">—</div><div class="stat-change" id="stBotSub"></div></div>
+    <div class="glass stat"><div class="stat-top">سیگنال‌های اخیر <span>📡</span></div><div class="stat-number" id="stSigs">0</div><div class="stat-change">۲۰ شکار آخر</div></div>
+    <div class="glass stat"><div class="stat-top">اخبار پرتاثیر <span>📰</span></div><div class="stat-number" id="stNews">0</div><div class="stat-change">سنتیمنت شدید</div></div>
+    <div class="glass stat"><div class="stat-top">مشترکین فعال <span>👥</span></div><div class="stat-number" id="stSubs">0</div><div class="stat-change">دریافت شکار خودکار</div></div>
+  </div>
+  <div class="grid two">
+    <div class="glass card">
+      <div style="display:flex;justify-content:space-between"><div><div class="card-title">آخرین شکارها</div><div class="card-sub">خروجی موتور شکار وین‌ریت</div></div><span class="updated" id="updTime"></span></div>
+      <div id="sigList" style="margin-top:12px"><div class="empty">هنوز شکاری ثبت نشده</div></div>
+    </div>
+    <div class="glass card">
+      <div class="card-title">📰 اخبار پرتاثیر</div><div class="card-sub">فیلترشده با سنتیمنت شدید</div>
+      <div id="newsList" style="margin-top:8px"><div class="empty">خبری نیست</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="view" id="v-admin">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-top:18px;flex-wrap:wrap;gap:10px">
+    <div><div style="font-size:10px;color:var(--purple)"><span class="pulse" style="background:var(--purple)"></span> محیط مدیریت</div>
+    <h1 style="margin:4px 0 0;font-size:21px">پنل ادمین <span style="color:var(--purple)">✦</span></h1></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn" id="btnBotToggle">🤖 ربات: —</button>
+      <button class="btn primary" id="btnAddUser">➕ ساخت اکانت</button>
+    </div>
+  </div>
+  <div class="grid stats">
+    <div class="glass stat"><div class="stat-top">اکانت‌ها <span>👤</span></div><div class="stat-number" id="adUsers">0</div></div>
+    <div class="glass stat"><div class="stat-top">فعال <span>🟢</span></div><div class="stat-number" id="adActive">0</div></div>
+    <div class="glass stat"><div class="stat-top">منقضی <span>🔴</span></div><div class="stat-number" id="adExpired">0</div></div>
+    <div class="glass stat"><div class="stat-top">مشترکین <span>📢</span></div><div class="stat-number" id="adSubs">0</div></div>
+  </div>
+  <div class="grid two">
+    <div class="glass card">
+      <div class="card-title">مدیریت کاربران</div><div class="card-sub">اکانت‌های ربات (تلگرام + وب)</div>
+      <div id="userList" style="margin-top:8px"></div>
+      <div class="form-row" id="addForm" style="display:none">
+        <input id="nuUser" placeholder="نام کاربری">
+        <input id="nuPass" placeholder="رمز عبور" type="password">
+        <input id="nuDays" placeholder="روز (0=بی‌نهایت)" style="max-width:150px" type="number" min="0">
+        <button class="btn primary" id="btnConfirmAdd">تایید و ساخت</button>
+        <button class="btn" id="btnCancelAdd">انصراف</button>
+      </div>
+    </div>
+    <div class="glass card">
+      <div class="card-title">📰 اخبار پرتاثیر</div><div class="card-sub">فید زنده موتور اخبار</div>
+      <div id="adNewsList" style="margin-top:8px"><div class="empty">خبری نیست</div></div>
+    </div>
+  </div>
+</div>
+</div>
+<div class="toast" id="toast">انجام شد</div>
+<script>
+const API="https://sniper-web.quilt-refract.workers.dev";
+const $=id=>document.getElementById(id);
+let mode="user", session=localStorage.getItem("sniper_session")||"", adminSession=localStorage.getItem("sniper_admin")||"";
+const toast=t=>{const el=$("toast");el.textContent=t;el.classList.add("show");setTimeout(()=>el.classList.remove("show"),2400)};
+async function api(p,opt={}){const r=await fetch(API+p,{...opt,headers:{"content-type":"application/json",...(session?{authorization:"Bearer "+session}:{}),...(opt.headers||{})}});return r.json()}
+setInterval(()=>{$("clock").textContent=new Date().toLocaleString("fa-IR",{weekday:"long",hour:"2-digit",minute:"2-digit"})},1000);
+$("tabUser").onclick=()=>{mode="user";$("tabUser").classList.add("active");$("tabAdmin").classList.remove("active");$("fUser").style.display="block";$("lblPass").textContent="رمز عبور"};
+$("tabAdmin").onclick=()=>{mode="admin";$("tabAdmin").classList.add("active");$("tabUser").classList.remove("active");$("fUser").style.display="none";$("lblPass").textContent="کد ادمین"};
+$("btnLogin").onclick=async()=>{
+  $("loginErr").textContent="";
+  try{
+    if(mode==="admin"){
+      const r=await api("/api/admin-login",{method:"POST",body:JSON.stringify({token:$("inPass").value})});
+      if(!r.ok){$("loginErr").textContent=r.error||"خطا";return}
+      adminSession=r.session; localStorage.setItem("sniper_admin",r.session); showView("admin");
+    }else{
+      const r=await api("/api/login",{method:"POST",body:JSON.stringify({username:$("inUser").value,password:$("inPass").value})});
+      if(!r.ok){$("loginErr").textContent=r.error||"خطا";return}
+      session=r.session; localStorage.setItem("sniper_session",session); localStorage.setItem("sniper_uname",$("inUser").value);
+      showView("user");
+    }
+  }catch(e){$("loginErr").textContent="خطای شبکه"}
+};
+$("inPass").addEventListener("keydown",e=>{if(e.key==="Enter")$("btnLogin").click()});
+$("inUser").addEventListener("keydown",e=>{if(e.key==="Enter")$("inPass").focus()});
+function showView(v){
+  $("v-login").classList.remove("on");$("v-user").classList.remove("on");$("v-admin").classList.remove("on");
+  $("v-"+v).classList.add("on");$("logoutBtn").style.display="inline-flex";
+  if(v!=="login")refresh();
+}
+$("logoutBtn").onclick=()=>{localStorage.clear();session="";adminSession="";$("logoutBtn").style.display="none";$("v-login").classList.add("on");$("v-user").classList.remove("on");$("v-admin").classList.remove("on")};
+(async()=>{
+  if(adminSession){showView("admin")}
+  else if(session){const r=await api("/api/state");if(r.ok){$("uname").textContent=localStorage.getItem("sniper_uname")||"تریدر";showView("user")}else{session="";localStorage.removeItem("sniper_session")}}
+})();
+const fa=n=>Number(n||0).toLocaleString("fa-IR");
+const dstr=t=>t?new Date(t).toLocaleString("fa-IR",{month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"}):"—";
+function renderState(s){
+  $("stBot").innerHTML=s.bot_enabled?'🟢 فعال':'🔴 خاموش';
+  $("stBotSub").textContent=s.bot_enabled?"در حال رصد بازار":"متوقف توسط ادمین";
+  $("stSigs").textContent=fa((s.signals||[]).length);
+  $("stNews").textContent=fa((s.news||[]).length);
+  $("stSubs").textContent=fa(s.subs);
+  $("updTime").textContent=s.updated?("به‌روزرسانی: "+dstr(s.updated)):"داده‌ای نرسیده";
+  const sigl=$("sigList");
+  sigl.innerHTML=(s.signals||[]).slice().reverse().map(x=>{
+    const short=/شورت|SHORT/.test(x.text), long=/لانگ|LONG/.test(x.text);
+    const nm=(x.text.match(/نماد:\*?\*? ([^\s]+)/)||["","—"])[1];
+    return `<div class="sig"><div class="sig-head"><span class="pair">${nm}</span>
+      <span class="pill ${short?'sell':long?'buy':'gold'}">${short?'SHORT ▼':long?'LONG ▲':'—'}</span></div>
+      <div class="sig-text">${String(x.text).replace(/\*\*/g,"").slice(0,340)}</div></div>`;
+  }).join("")||'<div class="empty">هنوز شکاری ثبت نشده</div>';
+  const nl=(s.news||[]).map(n=>`<div class="news-item"><span>${n.sent>0?"🟢":"🔴"}</span><span>${n.coin?"["+n.coin+"] ":""}${String(n.title).slice(0,110)}</span></div>`).join("");
+  $("newsList").innerHTML=nl||'<div class="empty">خبری نیست</div>';
+  $("adNewsList").innerHTML=nl||'<div class="empty">خبری نیست</div>';
+  const users=s.users||{};let act=0,exp=0;const now=Date.now()/1000;
+  for(const u of Object.values(users)){if(u.expires_at&&now>u.expires_at)exp++;else act++}
+  $("adUsers").textContent=fa(Object.keys(users).length);
+  $("adActive").textContent=fa(act);$("adExpired").textContent=fa(exp);$("adSubs").textContent=fa(s.subs);
+  const ul=$("userList");
+  ul.innerHTML=Object.entries(users).map(([name,u])=>{
+    const expired=u.expires_at&&now>u.expires_at;
+    return `<div class="user-row"><strong>${name}</strong>
+      <span class="user-state ${expired?'st-expired':'st-active'}">${expired?'● منقضی':'● فعال'} · تا ${u.expires_at?dstr(u.expires_at*1000):'∞'}</span>
+      <span class="updated">${dstr((u.created_at||0)*1000)}</span>
+      <button class="mini-btn del" data-del="${name}">🗑</button></div>`;
+  }).join("")||'<div class="empty">اکانتی نیست</div>';
+  ul.querySelectorAll("[data-del]").forEach(b=>b.onclick=async()=>{
+    if(!confirm("اکانت «"+b.dataset.del+"» حذف شود؟"))return;
+    const r=await api("/api/admin/deluser",{method:"POST",headers:{authorization:"Bearer "+adminSession},body:JSON.stringify({username:b.dataset.del})});
+    toast(r.ok?"صف شد — ربات در چرخه بعد اعمال می‌کند":"خطا");refresh();
+  });
+  $("btnBotToggle").textContent=s.bot_enabled?"🤖 ربات: روشن":"🤖 ربات: خاموش";
+}
+async function refresh(){try{const s=await api("/api/state");if(s.ok)renderState(s)}catch(e){}}
+$("btnNow").onclick=()=>{toast("تحلیل در چرخه بعدی ربات انجام می‌شود");refresh()};
+setInterval(refresh,30000);
+$("btnBotToggle").onclick=async()=>{
+  const r0=await api("/api/state");const cur=r0.bot_enabled;
+  const r=await api("/api/admin/bot",{method:"POST",headers:{authorization:"Bearer "+adminSession},body:JSON.stringify({enabled:!cur})});
+  toast(r.ok?(!cur?"صف شد: روشن":"صف شد: خاموش"):(r.error||"خطا"));refresh();
+};
+$("btnAddUser").onclick=()=>{$("addForm").style.display=$("addForm").style.display==="none"?"flex":"none"};
+$("btnCancelAdd").onclick=()=>$("addForm").style.display="none";
+$("btnConfirmAdd").onclick=async()=>{
+  const u=$("nuUser").value.trim(),p=$("nuPass").value,d=parseInt($("nuDays").value||"0");
+  if(!u||!p){toast("نام کاربری و رمز لازم است");return}
+  const r=await api("/api/admin/adduser",{method:"POST",headers:{authorization:"Bearer "+adminSession},body:JSON.stringify({username:u,password:p,days:d})});
+  if(r.ok){toast("اکانت صف شد — ربات در چرخه بعد می‌سازد");$("nuUser").value="";$("nuPass").value="";$("nuDays").value="";$("addForm").style.display="none";refresh()}
+  else toast(r.error||"خطا");
+};
+</script>
+</body>
+</html>
