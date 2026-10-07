@@ -415,6 +415,7 @@ document.querySelectorAll(".slink").forEach(b=>b.onclick=()=>{
   b.classList.add("active");$("s-"+b.dataset.s).classList.add("on");
   if(b.dataset.s==="charts")drawChart();
   if(b.dataset.s==="system")runHealth();
+  if(b.dataset.s==="account"){loadAlerts();loadStats()}
 });
 
 /* ---------- state ---------- */
